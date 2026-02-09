@@ -22,7 +22,7 @@ export default class LetVisitor extends antlr4.tree.ParseTreeVisitor {
 	visitConst(ctx) {
 	  console.log("const");
 	  this.constCount = this.constCount + 1;
-	  console.log(this.constCount);
+	  //console.log(this.constCount);
 
 	  	return Number.parseInt(ctx.INT().getText());
 	}
@@ -37,7 +37,11 @@ export default class LetVisitor extends antlr4.tree.ParseTreeVisitor {
 
 	// Visit a parse tree produced by LetParser#zero.
 	visitZero(ctx) {
-	  return this.visitChildren(ctx);
+		console.log("zero?")
+		if (this.visit(ctx.children[2]) == 0) {
+			return true;
+		}
+	  return false;
 	}
 
 
