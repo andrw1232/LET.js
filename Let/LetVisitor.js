@@ -14,15 +14,15 @@ export default class LetVisitor extends antlr4.tree.ParseTreeVisitor {
 	// Visit a parse tree produced by LetParser#start.
 	visitStart(ctx) {
 		console.log("start");
-	  return this.visitChildren(ctx)[0];
+	  	return this.visitChildren(ctx)[0];
 	}
 
 
 	// Visit a parse tree produced by LetParser#const.
 	visitConst(ctx) {
-	  console.log("const");
-	  this.constCount = this.constCount + 1;
-	  //console.log(this.constCount);
+		console.log("const");
+	  	this.constCount = this.constCount + 1;
+	  	//console.log(this.constCount);
 
 	  	return Number.parseInt(ctx.INT().getText());
 	}
@@ -31,7 +31,7 @@ export default class LetVisitor extends antlr4.tree.ParseTreeVisitor {
 	// Visit a parse tree produced by LetParser#diffexp.
 	visitDiffexp(ctx) {
 		console.log("diff");
-	  return (this.visit(ctx.children[2])) - (this.visit(ctx.children[4]));
+		return (this.visit(ctx.children[2])) - (this.visit(ctx.children[4]));
 	}
 
 
@@ -41,25 +41,31 @@ export default class LetVisitor extends antlr4.tree.ParseTreeVisitor {
 		if (this.visit(ctx.children[2]) == 0) {
 			return true;
 		}
-	  return false;
+	  	return false;
 	}
 
 
 	// Visit a parse tree produced by LetParser#if.
 	visitIf(ctx) {
-	  return this.visitChildren(ctx);
+		console.log("if exp");
+
+		if (this.visit(ctx.children[1])) {
+			return this.visit(ctx.children[3]);
+		} else {
+			return this.visit(ctx.children[5]);
+		}
 	}
 
 
 	// Visit a parse tree produced by LetParser#var.
 	visitVar(ctx) {
-	  return this.visitChildren(ctx);
+	  	return this.visitChildren(ctx);
 	}
 
 
 	// Visit a parse tree produced by LetParser#let.
 	visitLet(ctx) {
-	  return this.visitChildren(ctx);
+	  	return this.visitChildren(ctx);
 	}
 
 

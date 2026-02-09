@@ -13,7 +13,7 @@ import LetVisitor from './LetVisitor.js';
 // -(9,-(5,2))
 // zero? ( -(3,3) )
 
-const input = `zero? ( -(7,-(9,2)) )`;
+const input = `if zero?(0) then 42 else 19 `;
 
 const chars = new antlr4.InputStream(input);
 const lexer = new LetLexer(chars);
