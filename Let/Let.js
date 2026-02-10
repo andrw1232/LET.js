@@ -12,8 +12,14 @@ import LetVisitor from './LetVisitor.js';
 // -(7,3)
 // -(9,-(5,2))
 // zero? ( -(3,3) )
+// if zero?(0) then 42 else 19
+// let x = 3 in -(7,x)
 
-const input = `if zero?(0) then 42 else 19 `;
+const input = `let x = 7
+                    in let y = 2
+                        in let y = let x = -(x, 1)
+                                    in -(x, y)
+                                in -(-(x, 8), y)`;
 
 const chars = new antlr4.InputStream(input);
 const lexer = new LetLexer(chars);
