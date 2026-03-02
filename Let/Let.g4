@@ -1,23 +1,22 @@
 /**
 Command to parse: antlr4-parse Let.g4 prog -gui
 Command to compile to Javascript target: $ 
-antlr4 -Dlanguage=JavaScript Let.g4
+antlr4 -Dlanguage=JavaScript -visitor Let.g4
+npm i antlr4@4.9.2
 
 */
 
 grammar Let;
 start: exp;
-exp: INT #const
+exp: Number #const
     | '-''('exp','exp')' #diffexp
     | 'zero?' '('exp ')' #zero
     | 'if' exp 'then' exp 'else' exp #if
     | ID #var
-    | 'let' (ID '=' exp)* 'in' exp #let
+    | 'let' ID '=' exp 'in' exp #let
 ;
+Number: '-'? DIGIT+;
+fragment DIGIT: [0-9]+;
 ID: [a-zA-Z]+;
-INT:[0-9]+;
 WHITESPACE : [\p{White_Space}]+ -> skip;
-
-
-
 
