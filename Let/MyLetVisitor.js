@@ -16,16 +16,16 @@ export default class MyLetVisitor extends LetVisitor {
 
     // Visit a parse tree produced by LetParser#start.
     visitStart(ctx) {
-        console.log("start");
+        // console.log("start");
         // console.log(ctx.getPayload());
-        console.log(ctx.children[0].getText());
+        //console.log(ctx.children[0].getText());
         return this.visitChildren(ctx)[0];
     }
 
 
     // Visit a parse tree produced by LetParser#const.
     visitConst(ctx) {
-        console.log("const");
+        // console.log("const");
         //console.log(Number.parseInt(ctx.getText()));
         return Number.parseInt(ctx.getText());
     }
@@ -33,7 +33,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // Visit a parse tree produced by LetParser#diffexp.
     visitDiffexp(ctx) {
-        console.log("diff");
+        // console.log("diff");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
         //console.log("left:"+left+"   right: "+right);
@@ -43,7 +43,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // Visit a parse tree produced by LetParser#zero.
     visitZero(ctx) {
-        console.log("zero?");
+        // console.log("zero?");
         if (this.visit(ctx.children[2]) == 0) {
             return true;
         }
@@ -53,7 +53,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // Visit a parse tree produced by LetParser#if.
     visitIf(ctx) {
-        console.log("if");
+        // console.log("if");
 
         if (this.visit(ctx.children[1])) {
             return this.visit(ctx.children[3]);
@@ -66,7 +66,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // Visit a parse tree produced by LetParser#var.
     visitVar(ctx) {
-        console.log("var");
+        // console.log("var");
         return Env.applyEnv(this.env, ctx.getText());
     }
 
@@ -74,13 +74,11 @@ export default class MyLetVisitor extends LetVisitor {
     // Visit a parse tree produced by LetParser#let.
     visitLet(ctx) {
 
-        console.log("let");
+        // console.log("let");
         const localEnv = this.env;
         this.env = Env.extendEnv(ctx.children[1].getText(), this.visit(ctx.children[3]), localEnv);
 
         return this.visit(ctx.children[5]);
     }
-
-
 
 }

@@ -36,8 +36,8 @@ function parse(inputString, context, replResourceName, callback) {
 
         const parser = new LetParser(tokens);
         // parser error handling setup
-        parser.removeErrorListeners(); // remove the old
-        parser.addErrorListener(new ErrorLet()); // add the new
+        //parser.removeErrorListeners(); // remove the old
+        //parser.addErrorListener(new ErrorLet()); // add the new
 
         var tree;
         try {

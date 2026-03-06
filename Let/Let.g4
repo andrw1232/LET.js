@@ -17,6 +17,6 @@ exp: Number #const
 ;
 Number: '-'? DIGIT+;
 fragment DIGIT: [0-9]+;
-ID: [a-zA-Z]+;
+ID: [a-zA-Z]+ ;
 WHITESPACE : [\p{White_Space}]+ -> skip;
-
+//([a-zA-Z0-9]|'_'| '?'| '-')+
