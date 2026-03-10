@@ -4,6 +4,7 @@ import LetParser from './LetParser.js';
 import LetVisitor from './MyLetVisitor.js';
 import repl from 'node:repl';
 import ErrorLet from './ErrorLet.js';
+import fs from 'node:fs';
 
 /** let x = 7
     in let y = 2
@@ -19,18 +20,26 @@ import ErrorLet from './ErrorLet.js';
 
 
 
+// most basic parsing of a string
+function parse(inputData) {
+
+    const chars = new antlr4.InputStream(inputData);
+    const lexer = new LetLexer(chars);
+    const tokens = new antlr4.CommonTokenStream(lexer);
+    const parser = new LetParser(tokens);
+    const tree = parser.start();
+    const visitor = new LetVisitor();
+    // visit the tree to get the result
+    const result = visitor.visitStart(tree);
+    console.log(result);
+
+}
 
 
 
-
-
-
-
-function parse(inputString, context, replResourceName, callback) {
+function parseREPL(inputString, context, replResourceName, callback) {
 
     try {
-
-        //console.log("input: "+inputString.trim());
 
         // READING
         const chars = new antlr4.InputStream(inputString);
@@ -39,14 +48,13 @@ function parse(inputString, context, replResourceName, callback) {
 
         const parser = new LetParser(tokens);
         // parser error handling setup
-        //parser.removeErrorListeners(); // remove the old
-        //parser.addErrorListener(new ErrorLet()); // add the new
+        parser.removeErrorListeners(); // remove the old
+        parser.addErrorListener(new ErrorLet()); // add the new
 
         var tree;
         try {
             tree = parser.start(); // this prints to the console if the input is incomplete
         } catch (error) {
-            //console.log("parse error: "+error);
             return callback(new repl.Recoverable(error));
         }
 
@@ -56,7 +64,6 @@ function parse(inputString, context, replResourceName, callback) {
             var result = visitor.visitStart(tree);
             callback(null, result);
         } catch (error) {
-            //console.log("error visiting: "+error);
             return callback(new repl.Recoverable(error));
         }
 
@@ -66,26 +73,28 @@ function parse(inputString, context, replResourceName, callback) {
     }
 }
 
+// if a file is passed as an argument on the command line
+if (process.argv.length > 2) {
+    // console.log("A file was passed");
+
+    fs.readFile(process.argv[2], 'utf8', (err, data) => {
+        // if there is na error reading the file, print the error
+        if (err) {
+            console.log(err);
+            return;
+        }
+        parse(data); // parse the contents of the file
+    });
+} 
+else {
+    // make REPL. prompt is the line start character(s). parse is the interpreting function.
+    const r = repl.start( {prompt: "->", eval: parseREPL} );
+    
+    // REPL exit message
+    r.on('exit', () => {
+        console.log("Thanks for using LET");
+    }); 
+}
 
 
-
-
-// make REPL. prompt is the line start character(s). parse is the interpreting function.
-const r = repl.start( {prompt: "->", eval: parse} );
-
-// REPL exit message
-r.on('exit',() => {
-    console.log("Thanks for using LET");
-}); 
-
-
-
-/**
- * fails to properly continue multi line REPL 
- * Case: zero?( \n
- *       0) \n
- * Expected: true
- * result: 0
- * 
- */
 
