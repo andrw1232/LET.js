@@ -1,0 +1,78 @@
+import antlr4 from 'antlr4';
+import LetLexer from './LetLexer.js';
+import LetParser from './LetParser.js';
+import LetVisitor from './MyLetVisitor.js';
+import repl from 'node:repl';
+import ErrorLet from './ErrorLet.js';
+
+/** let x = 7
+    in let y = 2
+    in let y = let x = -(x, 1)
+    in -(x, y)
+    in -(-(x, 8), y)
+*/
+// -(7,3)
+// -(9,-(5,2))
+// zero? ( -(3,3) )
+// if zero?(0) then 42 else 19
+// let x = 3 in -(7,x)
+
+
+export default class LetInterpreter {
+
+    // most basic parsing of a string
+    static parse(inputData) {
+
+        const chars = new antlr4.InputStream(inputData);
+        const lexer = new LetLexer(chars);
+        const tokens = new antlr4.CommonTokenStream(lexer);
+        const parser = new LetParser(tokens);
+        const tree = parser.start();
+        const visitor = new LetVisitor();
+        // visit the tree to get the result
+        const result = visitor.visitStart(tree);
+        console.log(result);
+
+    }
+
+
+
+
+    // parsing for the read eval print loop
+    static parseREPL(inputString, context, replResourceName, callback) {
+
+        try {
+
+            // READING
+            const chars = new antlr4.InputStream(inputString);
+            const lexer = new LetLexer(chars);
+            const tokens = new antlr4.CommonTokenStream(lexer);
+
+            const parser = new LetParser(tokens);
+            // parser error handling setup
+            parser.removeErrorListeners(); // remove the old
+            parser.addErrorListener(new ErrorLet()); // add the new
+
+            var tree;
+            try { // try to parse
+                tree = parser.start();
+            } catch (error) {
+                return callback(new repl.Recoverable(error)); // if it can't be parsed yet, get more input
+            }
+
+            const visitor = new LetVisitor();
+
+            try { // try to visit and interpret the tree
+                var result = visitor.visitStart(tree);
+                //console.log(typeof(result));
+                callback(null, result);
+            } catch (error) {
+                return callback(new repl.Recoverable(error));
+            }
+
+        } catch (error) {
+            console.log(error);
+            callback(new Error('uncaught error'));
+        }
+    }
+}
