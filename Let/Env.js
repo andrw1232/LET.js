@@ -7,8 +7,7 @@
 export function applyEnv(env, variable) {
         
     if (env.length == 0) {
-        console.log("UH OH!!!!!! variable not found in the environment");
-        return null;
+        throw new Error("Unbound variable: "+variable);
     }
     else if (env[0][0] == variable) {
         return env[0][1];

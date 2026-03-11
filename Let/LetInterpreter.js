@@ -29,7 +29,7 @@ export default class LetInterpreter {
         const parser = new LetParser(tokens);
         const tree = parser.start();
         const visitor = new LetVisitor();
-        // visit the tree to get the result
+        // visit the parse tree to get the result
         const result = visitor.visitStart(tree);
         return result;
 

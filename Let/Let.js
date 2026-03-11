@@ -25,7 +25,7 @@ if (process.argv.length > 2) {
     fs.readFile(process.argv[2], 'utf8', (err, data) => {
         // if there is an error reading the file, print the error
         if (err) {
-            console.log(err);
+            console.error(err);
             return;
         }
         console.log(LetInterpreter.parse(data)); // parse the contents of the file

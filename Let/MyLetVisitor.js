@@ -7,9 +7,6 @@ import expval from './Datatypes.js';
 // This class defines a complete generic visitor for a parse tree produced by LetParser.
 
 export default class MyLetVisitor extends LetVisitor {
-
-    //env;
-
     
     constructor() {
         super();
