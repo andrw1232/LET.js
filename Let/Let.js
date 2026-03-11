@@ -28,7 +28,7 @@ if (process.argv.length > 2) {
             console.log(err);
             return;
         }
-        LetInterpreter.parse(data); // parse the contents of the file
+        console.log(LetInterpreter.parse(data)); // parse the contents of the file
     });
 } 
 else {

@@ -9,9 +9,9 @@ npm i antlr4@4.9.2
 
 grammar Let;
 start: exp;
-exp: Number #const
+exp: Number #const // numval
     | '-''('exp','exp')' #diffexp
-    | 'zero?' '('exp ')' #zero
+    | 'zero?' '('exp ')' #zero // boolval
     | 'if' exp 'then' exp 'else' exp #if
     | ID #var
     | 'let' ID '=' exp 'in' exp #let

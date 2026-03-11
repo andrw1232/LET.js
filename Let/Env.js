@@ -5,24 +5,17 @@
  * @returns the value associated with the variable or null if no binding is in the environment.
  */
 export function applyEnv(env, variable) {
-    
-    // console.log("apply: "+env);
-    
+        
     if (env.length == 0) {
         console.log("UH OH!!!!!! variable not found in the environment");
         return null;
     }
     else if (env[0][0] == variable) {
-        //console.log("here"+env[0][1]);
         return env[0][1];
     }
     else {
         var localEnv = envCopy(env);
-        
-
         localEnv.shift(); // removes the first element of the array
-        //console.log("env: "+env+" local: "+localEnv);
-
         return applyEnv(localEnv, variable);
     }
 }
@@ -51,6 +44,8 @@ export function extendEnv(variable, value, env) {
     //console.log("extended: "+localEnv);
     return localEnv;
 }
+
+
 
 
 function envCopy(arr) {

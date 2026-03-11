@@ -2,6 +2,7 @@
 import antlr4 from 'antlr4';
 import * as Env from './Env.js';
 import LetVisitor from './LetVisitor.js';
+import expval from './Datatypes.js';
 
 // This class defines a complete generic visitor for a parse tree produced by LetParser.
 
@@ -13,14 +14,17 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
+        this.env = Env.extendEnv("x", expval.numval(10),this.env);
+        this.env = Env.extendEnv("v", expval.numval(5),this.env);
+        this.env = Env.extendEnv("i", expval.numval(1),this.env);
     }
 
     // Visit a parse tree produced by LetParser#start.
     visitStart(ctx) {
         // console.log("start");
         // console.log(ctx.getPayload());
-        //console.log(ctx.children[0].getText());
-        return this.visitChildren(ctx)[0];
+        // console.log(ctx.children[0].getText());
+        return this.visitChildren(ctx)[0].val;
     }
 
 
@@ -28,7 +32,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitConst(ctx) {
         // console.log("const");
         //console.log(Number.parseInt(ctx.getText()));
-        return Number.parseInt(ctx.getText());
+        return expval.numval(Number.parseInt(ctx.getText()));
     }
 
 
@@ -38,17 +42,17 @@ export default class MyLetVisitor extends LetVisitor {
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
         //console.log("left:"+left+"   right: "+right);
-        return left-right;
+        return expval.numval(left.val-right.val);
     }
 
 
     // Visit a parse tree produced by LetParser#zero.
     visitZero(ctx) {
         // console.log("zero?");
-        if (this.visit(ctx.children[2]) == 0) {
-            return true;
+        if (expval.numEqual(this.visit(ctx.children[2]), expval.numval(0))) {
+            return expval.boolval(true);
         }
-        return false;
+        return expval.boolval(false);
     }
 
 
@@ -56,7 +60,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitIf(ctx) {
         // console.log("if");
 
-        if (this.visit(ctx.children[1])) {
+        if (this.visit(ctx.children[1]).val) {
             return this.visit(ctx.children[3]);
         } else {
             return this.visit(ctx.children[5]);

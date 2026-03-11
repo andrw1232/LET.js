@@ -31,7 +31,7 @@ export default class LetInterpreter {
         const visitor = new LetVisitor();
         // visit the tree to get the result
         const result = visitor.visitStart(tree);
-        console.log(result);
+        return result;
 
     }
 
@@ -57,6 +57,7 @@ export default class LetInterpreter {
             try { // try to parse
                 tree = parser.start();
             } catch (error) {
+                console.error(error);
                 return callback(new repl.Recoverable(error)); // if it can't be parsed yet, get more input
             }
 
@@ -67,6 +68,7 @@ export default class LetInterpreter {
                 //console.log(typeof(result));
                 callback(null, result);
             } catch (error) {
+                console.error(error);
                 return callback(new repl.Recoverable(error));
             }
 
