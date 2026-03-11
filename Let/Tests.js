@@ -37,8 +37,6 @@ function simpleUnboundVariableTests() {
     try {
         assert.throws(function() { LetInterpreter.parse("foo"); }, "test-unbound-var-1");
         assert.throws(function() { LetInterpreter.parse("-(x,foo)"); }, "test-unbound-var-2");
-
-
     } catch (error) {
         console.error("Error: "+error.message);
     }

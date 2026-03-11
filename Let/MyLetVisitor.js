@@ -4,7 +4,6 @@ import * as Env from './Env.js';
 import LetVisitor from './LetVisitor.js';
 import expval from './Datatypes.js';
 
-// This class defines a complete generic visitor for a parse tree produced by LetParser.
 
 export default class MyLetVisitor extends LetVisitor {
     
@@ -39,7 +38,12 @@ export default class MyLetVisitor extends LetVisitor {
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
         //console.log("left:"+left+"   right: "+right);
-        return expval.numval(left.val-right.val);
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numval(left.val-right.val);
+        } else {
+            throw new Error("Non number value to diff exp");
+        }
+        
     }
 
 
@@ -56,11 +60,15 @@ export default class MyLetVisitor extends LetVisitor {
     // Visit a parse tree produced by LetParser#if.
     visitIf(ctx) {
         // console.log("if");
-
-        if (this.visit(ctx.children[1]).val) {
-            return this.visit(ctx.children[3]);
+	    var conditional = this.visit(ctx.children[1]);
+        if (expval.isBool(conditional)) { // ensure legal input
+            if (conditional.val) { // conditional is true
+                return this.visit(ctx.children[3]);
+            } else { // conditional is false
+                return this.visit(ctx.children[5]);
+            }
         } else {
-            return this.visit(ctx.children[5]);
+            throw new Error("Non boolean value to if exp");
         }
     }
 
