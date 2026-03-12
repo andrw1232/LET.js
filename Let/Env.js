@@ -5,6 +5,8 @@
  * @returns the value associated with the variable or null if no binding is in the environment.
  */
 export function applyEnv(env, variable) {
+
+
         
     if (env.length == 0) { // no where left to search
         throw new Error("Unbound variable: "+variable);
