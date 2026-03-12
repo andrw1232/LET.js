@@ -2,7 +2,7 @@
 import * as Env from './Env.js';
 import expval from './Datatypes.js';
 // default antlr class to extend
-import LetVisitor from './LetVisitor.js';
+import LetVisitor from './ANTLRParser/LetVisitor.js';
 
 
 export default class MyLetVisitor extends LetVisitor {
