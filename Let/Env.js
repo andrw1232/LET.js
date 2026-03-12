@@ -6,7 +6,7 @@
  */
 export function applyEnv(env, variable) {
         
-    if (env.length == 0) {
+    if (env.length == 0) { // no where left to search
         throw new Error("Unbound variable: "+variable);
     }
     else if (env[0][0] == variable) {
@@ -25,28 +25,26 @@ export function applyEnv(env, variable) {
  * @returns an empty environment 
  */
 export function emptyEnv() {
-    //console.log("env created");
     return Array();
 }
 
 
 /**
  * a function to add a variable value pair to an existing environment
- * @param {*} variable the varaible to associate with the value
+ * @param {*} variable the variable to associate with the value
  * @param {*} value the value to associate with the variable
- * @param {*} env the environemnt to store the binding in
+ * @param {*} env the environment to store the binding in
  * @returns a new environment with a new binding of the variable with the value
  */
 export function extendEnv(variable, value, env) {
     var localEnv = envCopy(env);
     localEnv.unshift(new Array(variable,value)); // places the new element at the beginning of the array
-    //console.log("extended: "+localEnv);
     return localEnv;
 }
 
 
 
-
+// internal function to make a deep copy of an environment
 function envCopy(arr) {
 
     var newArray = new Array(arr.length);
@@ -54,7 +52,5 @@ function envCopy(arr) {
     for (let i = 0; i < newArray.length; i++) {
         newArray[i] = new Array(arr[i][0],arr[i][1]);    
     }
-    //console.log("old: "+arr);
-    //console.log("new: "+newArray)
     return newArray;
 }

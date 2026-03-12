@@ -1,6 +1,9 @@
+// node imports
 import repl from 'node:repl';
 import fs from 'node:fs';
-import LetInterpreter from './LetInterpreter.js';
+// custom language interpreter
+import Interpreter from './Interpreter.js';
+
 /** let x = 7
     in let y = 2
     in let y = let x = -(x, 1)
@@ -14,9 +17,9 @@ import LetInterpreter from './LetInterpreter.js';
 // let x = 3 in -(7,x)
 
 
+
+
 // main entry point
-
-
 
 
 // if a file is passed as an argument on the command line
@@ -28,13 +31,12 @@ if (process.argv.length > 2) {
             console.error(err);
             return;
         }
-        console.log(LetInterpreter.parse(data)); // parse the contents of the file
+        console.log(Interpreter.parse(data)); // parse the contents of the file
     });
-} 
-else {
+} else {
     //console.log("here");
     // make REPL. prompt is the line start character(s). parse is the interpreting function.
-    const r = repl.start( {prompt: "->", eval: LetInterpreter.parseREPL} );
+    const r = repl.start( {prompt: "->", eval: Interpreter.parseREPL} );
     
     // REPL exit message
     r.on('exit', () => {

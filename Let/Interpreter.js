@@ -1,9 +1,13 @@
+// node imports
 import antlr4 from 'antlr4';
+import repl from 'node:repl';
+// antlr parser file imports
 import LetLexer from './LetLexer.js';
 import LetParser from './LetParser.js';
-import LetVisitor from './MyLetVisitor.js';
-import repl from 'node:repl';
-import ErrorLet from './ErrorLet.js';
+// custom overridden antlr classes
+import CustomError from './CustomError.js';
+// language specific custom classes
+import Visitor from './MyLetVisitor.js';
 
 /** let x = 7
     in let y = 2
@@ -28,14 +32,12 @@ export default class LetInterpreter {
         const tokens = new antlr4.CommonTokenStream(lexer);
         const parser = new LetParser(tokens);
         const tree = parser.start();
-        const visitor = new LetVisitor();
+        const visitor = new Visitor();
         // visit the parse tree to get the result
         const result = visitor.visitStart(tree);
         return result;
 
     }
-
-
 
 
     // parsing for the read eval print loop
@@ -51,7 +53,7 @@ export default class LetInterpreter {
             const parser = new LetParser(tokens);
             // parser error handling setup
             parser.removeErrorListeners(); // remove the old
-            parser.addErrorListener(new ErrorLet()); // add the new
+            parser.addErrorListener(new CustomError()); // add the new
 
             var tree;
             try { // try to parse
@@ -61,7 +63,7 @@ export default class LetInterpreter {
                 return callback(new repl.Recoverable(error)); // if it can't be parsed yet, get more input
             }
 
-            const visitor = new LetVisitor();
+            const visitor = new Visitor();
 
             try { // try to visit and interpret the tree
                 var result = visitor.visitStart(tree);

@@ -1,0 +1,61 @@
+
+
+
+export default class expval {
+
+    // num vals
+    static numval(input) {
+        var exp = new expval();
+        exp.type = "num";
+        exp.val = input;
+        return exp;
+    }
+
+    static isNum(input) {
+        if (input.type === "num") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static numEqual(x, y) {
+        if (this.isNum(x) && this.isNum(y)) {
+            if (x.val === y.val) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // bool vals
+    static boolval(input) {
+
+        var exp = new expval();
+        exp.type = "bool";
+        exp.val = input;
+        return exp;
+    }
+
+    
+    static isBool(input) {
+        if (input.type === "bool") { // should add a try catch if input isn't an object with field 'type'
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    // make a generic exp val and fit the type as best as possible
+    static makeExpVal(input) {
+        if (typeof(input) === "number") {
+            return this.numval(input);
+        }
+        if (typeof(input) == "boolean") {
+            return this.boolval(input);
+        }
+        throw new Error("invalid LET datatype for: "+input);
+    }
+
+}

@@ -1,8 +1,8 @@
-// jshint ignore: start
-import antlr4 from 'antlr4';
+// custom classes
 import * as Env from './Env.js';
-import LetVisitor from './LetVisitor.js';
 import expval from './Datatypes.js';
+// default antlr class to extend
+import LetVisitor from './LetVisitor.js';
 
 
 export default class MyLetVisitor extends LetVisitor {
