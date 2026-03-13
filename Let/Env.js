@@ -6,18 +6,19 @@
  */
 export function applyEnv(env, variable) {
 
-
-        
     if (env.length == 0) { // no where left to search
         throw new Error("Unbound variable: "+variable);
     }
-    else if (env[0][0] == variable) {
-        return env[0][1];
-    }
     else {
+        for (let i = 0; i < env[0][0].length; i++) {
+            if (env[0][0][i] == variable) {
+                return env[0][1][i];
+            }
+        }
         var localEnv = envCopy(env);
-        localEnv.shift(); // removes the first element of the array
-        return applyEnv(localEnv, variable);
+        localEnv.shift()
+        return applyEnv(localEnv,variable);
+
     }
 }
 
@@ -33,26 +34,28 @@ export function emptyEnv() {
 
 /**
  * a function to add a variable value pair to an existing environment
- * @param {*} variable the variable to associate with the value
- * @param {*} value the value to associate with the variable
+ * @param {*} variableArr the variables to associate with the values
+ * @param {*} valueArr the values to associate with the variables
  * @param {*} env the environment to store the binding in
  * @returns a new environment with a new binding of the variable with the value
  */
-export function extendEnv(variable, value, env) {
+export function extendEnv(variableArr, valueArr, env) {
     var localEnv = envCopy(env);
-    localEnv.unshift(new Array(variable,value)); // places the new element at the beginning of the array
+
+    // places the two new lists into a new array at the beginning of the environment array
+    localEnv.unshift(new Array(variableArr,valueArr)); 
     return localEnv;
 }
 
 
+// [[[],[]] , [[],[]]] two extends
 
-// internal function to make a deep copy of an environment
-function envCopy(arr) {
-
+// makes a deep copy of an environment
+export function envCopy(arr) {
     var newArray = new Array(arr.length);
-
     for (let i = 0; i < newArray.length; i++) {
-        newArray[i] = new Array(arr[i][0],arr[i][1]);    
+        newArray[i] = [arr[i][0],arr[i][1]];
     }
     return newArray;
 }
+

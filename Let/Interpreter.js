@@ -59,7 +59,7 @@ export default class LetInterpreter {
             try { // try to parse
                 tree = parser.start();
             } catch (error) {
-                console.error(error);
+                console.error(error.message);
                 return callback(new repl.Recoverable(error)); // if it can't be parsed yet, get more input
             }
 

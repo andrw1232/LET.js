@@ -10,9 +10,9 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv("x", expval.numval(10),this.env);
-        this.env = Env.extendEnv("v", expval.numval(5),this.env);
-        this.env = Env.extendEnv("i", expval.numval(1),this.env);
+        this.env = Env.extendEnv(["x"], [expval.numval(10)],this.env);
+        this.env = Env.extendEnv(["v"], [expval.numval(5)],this.env);
+        this.env = Env.extendEnv(["i"], [expval.numval(1)],this.env);
     }
 
     // START
@@ -90,11 +90,27 @@ export default class MyLetVisitor extends LetVisitor {
     // LET
     visitLet(ctx) {
 
-        // console.log("let");
-        const localEnv = this.env;
-        this.env = Env.extendEnv(ctx.children[1].getText(), this.visit(ctx.children[3]), localEnv);
+        //console.log("let");
+        //console.log(ctx.children.length);
 
-        return this.visit(ctx.children[5]);
+
+
+        const localEnv = Env.envCopy(this.env);
+
+        var variableArr = [];
+        for (let i = 1; i < ctx.children.length - 4; i = i+3) {
+            variableArr.unshift(ctx.children[i].getText());
+        }
+
+        var valueArr = [];
+        for (let i = 3; i < ctx.children.length - 2; i = i+3) {
+           valueArr.unshift(this.visit(ctx.children[i]));
+        }
+
+
+        this.env = Env.extendEnv(variableArr, valueArr, localEnv);
+        
+        return this.visit(ctx.children[ctx.children.length-1]);
     }
 
 }
