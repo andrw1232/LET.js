@@ -15,7 +15,7 @@ export default class MyLetVisitor extends LetVisitor {
         this.env = Env.extendEnv("i", expval.numval(1),this.env);
     }
 
-    // Visit a parse tree produced by LetParser#start.
+    // START
     visitStart(ctx) {
         // console.log("start");
         // console.log(ctx.getPayload());
@@ -24,15 +24,21 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
-    // Visit a parse tree produced by LetParser#const.
+    // NUM
     visitConst(ctx) {
-        // console.log("const");
-        //console.log(Number.parseInt(ctx.getText()));
-        return expval.numval(Number.parseInt(ctx.getText()));
+        //console.log("const");
+
+        try {
+            var numval = Number.parseFloat(ctx.getText());
+            return expval.numval(numval);
+        } catch (error) {
+            throw new Error("Invalid number");
+        }
+
     }
 
 
-    // Visit a parse tree produced by LetParser#diffexp.
+    // DIFF
     visitDiffexp(ctx) {
         // console.log("diff");
         var left = (this.visit(ctx.children[2]));
@@ -47,7 +53,7 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
-    // Visit a parse tree produced by LetParser#zero.
+    // ZERO?
     visitZero(ctx) {
         // console.log("zero?");
         if (expval.numEqual(this.visit(ctx.children[2]), expval.numval(0))) {
@@ -57,7 +63,7 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
-    // Visit a parse tree produced by LetParser#if.
+    // IF ELSE THEN
     visitIf(ctx) {
         // console.log("if");
 	    var conditional = this.visit(ctx.children[1]);
@@ -74,14 +80,14 @@ export default class MyLetVisitor extends LetVisitor {
 
 
 
-    // Visit a parse tree produced by LetParser#var.
+    // VAR
     visitVar(ctx) {
         // console.log("var");
         return Env.applyEnv(this.env, ctx.getText());
     }
 
 
-    // Visit a parse tree produced by LetParser#let.
+    // LET
     visitLet(ctx) {
 
         // console.log("let");
