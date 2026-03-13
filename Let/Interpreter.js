@@ -2,8 +2,8 @@
 import antlr4 from 'antlr4';
 import repl from 'node:repl';
 // antlr parser file imports
-import LetLexer from './LetLexer.js';
-import LetParser from './LetParser.js';
+import LetLexer from './ANTLRParser/LetLexer.js';
+import LetParser from './ANTLRParser/LetParser.js';
 // custom overridden antlr classes
 import CustomError from './CustomError.js';
 // language specific custom classes
