@@ -17,7 +17,7 @@ exp: Number #const // -> numval
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
 ;
 Number: '-'? DIGIT+ ('.' DIGIT+ )?;
-fragment DIGIT: [0-9]+;
+fragment DIGIT: [0-9];
 ID: [a-zA-Z] ([a-zA-Z0-9] | '?' | '_' | '-')* ;
 WHITESPACE : [\p{White_Space}]+ -> skip;
 //([a-zA-Z0-9]|'_'| '?'| '-')+
