@@ -1,11 +1,11 @@
 
 
 
-export default class expval {
+export default class expVal {
 
     // num vals
-    static numval(input) {
-        var exp = new expval();
+    static numVal(input) {
+        var exp = new expVal();
         exp.type = "num";
         exp.val = input;
         return exp;
@@ -29,9 +29,9 @@ export default class expval {
     }
 
     // bool vals
-    static boolval(input) {
+    static boolVal(input) {
 
-        var exp = new expval();
+        var exp = new expVal();
         exp.type = "bool";
         exp.val = input;
         return exp;
@@ -47,10 +47,10 @@ export default class expval {
     }
 
 
-    static procval(input) {
-        var exp = new expval();
+    static procVal(input) {
+        var exp = new expVal();
         exp.type = "proc";
-        exp.val = input;
+        exp.val = input; // array of: the ID, body (that needs to be visited), and env
         return exp;
     }
 
@@ -63,17 +63,16 @@ export default class expval {
     }
 
 
-
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
         if (typeof(input) === "number") {
-            return this.numval(input);
+            return this.numVal(input);
         }
-        if (typeof(input) == "boolean") {
-            return this.boolval(input);
+        if (typeof(input) === "boolean") {
+            return this.boolVal(input);
         }
-        if (typeof(input) == "function") {
-            return this.procval(input);
+        if (typeof(input) === "function") {
+            return this.procVal(input);
         }
         throw new Error("invalid LET datatype for: "+input);
     }

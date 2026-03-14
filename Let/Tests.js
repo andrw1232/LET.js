@@ -108,7 +108,7 @@ function nestedLetTests() {
     }
 }
 
-function multipleLetArguments() {
+function multipleLetArgumentsTests() {
     try {
         assert.equal(Interpreter.parse("let a = 2 b = 3 in -(b,a)"), 1, "multiple-argument-diff");
         assert.equal(Interpreter.parse("let a = -(6,4) b = 3 in -(b,a)"), 1, "multiple-argument-diff-in-1st-arg");
@@ -119,6 +119,19 @@ function multipleLetArguments() {
     }
 }
 
+function basicProcTests() {
+    try {
+        assert.equal(Interpreter.parse("(proc(x) -(x,1) 30)"), 29, "apply-proc-in-rator-pos");
+        assert.equal(Interpreter.parse("let f = proc (x) -(x,1) in (f 30)"), 29, "apply-simple-proc");
+        assert.equal(Interpreter.parse("(proc(f) (f 30) proc(x) -(x,1))"), 29, "let-to-proc-1");
+        
+        assert.equal(Interpreter.parse("((proc (x) proc (y) -(x,y)  5) 6)"), -1, "nested-procs");
+        assert.equal(Interpreter.parse("let f = proc(x) proc (y) -(x,y) in ((f -(10,5)) 6)"), -1, "nested-procs2");
+
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
 
 simpleArithmeticTests();
 nestedArithmeticTests();
@@ -131,4 +144,5 @@ armsOfIfTests2();
 simpleLetTests();
 letBodyRHSEvalTests();
 nestedLetTests();
-multipleLetArguments();
+multipleLetArgumentsTests();
+basicProcTests();

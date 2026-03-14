@@ -52,9 +52,10 @@ export function extendEnv(variableArr, valueArr, env) {
 
 // makes a deep copy of an environment
 export function envCopy(arr) {
+    //console.log(arr);
     var newArray = new Array(arr.length);
     for (let i = 0; i < newArray.length; i++) {
-        newArray[i] = [arr[i][0],arr[i][1]];
+        newArray[i] = [arr[i][0], arr[i][1]];
     }
     return newArray;
 }
