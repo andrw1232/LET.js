@@ -47,6 +47,23 @@ export default class expval {
     }
 
 
+    static procval(input) {
+        var exp = new expval();
+        exp.type = "proc";
+        exp.val = input;
+        return exp;
+    }
+
+    static isProc(input) {
+        if (input.type == "proc") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
         if (typeof(input) === "number") {
@@ -54,6 +71,9 @@ export default class expval {
         }
         if (typeof(input) == "boolean") {
             return this.boolval(input);
+        }
+        if (typeof(input) == "function") {
+            return this.procval(input);
         }
         throw new Error("invalid LET datatype for: "+input);
     }
