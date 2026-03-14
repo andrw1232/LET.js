@@ -66,7 +66,7 @@ export default class expVal {
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
         if (typeof(input) === "number") {
-            return this.numVal(input);
+            return this.numVal(input); // is the 'this.' needed?
         }
         if (typeof(input) === "boolean") {
             return this.boolVal(input);

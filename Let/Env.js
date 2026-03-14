@@ -17,7 +17,7 @@ export function applyEnv(env, variable) {
         }
         var localEnv = envCopy(env);
         localEnv.shift()
-        return applyEnv(localEnv,variable);
+        return applyEnv(localEnv, variable);
 
     }
 }

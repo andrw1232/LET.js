@@ -133,6 +133,35 @@ function basicProcTests() {
     }
 }
 
+function yCombinatorTest() {
+    try {
+        assert.equal(Interpreter.parse(```
+        let fix = proc (f) 
+                let d = proc (x) proc (z) ((f (x x)) z) 
+                in proc (n) ((f (d d)) n) 
+        in let 
+            t4m = proc (f) proc(x) if zero?(x) then 0 else -((f -(x,1)),-4)
+        in let times4 = (fix t4m)
+            in (times4 3)```), 12, "y-combinator-1");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function letrecTests() {
+    try {
+        assert.equal(Interpreter.parse("letrec f(x) = -(x,1) in (f 33)"), 32, "simple-letrec-1");
+        assert.equal(Interpreter.parse("letrec f(x) = if zero?(x)  then 0 else -((f -(x,1)), -2) in (f 4)"), 8, "simple-letrec-2");
+        assert.equal(Interpreter.parse("let m = -5 in letrec f(x) = if zero?(x) then 0 else -((f -(x,1)), m) in (f 4"), 20, "simple-letrec-3");
+        assert.equal(Interpreter.parse(```letrec even(odd)  = proc(x) if zero?(x) then 1 else (odd -(x,1))
+                                            in letrec  odd(x)  = if zero?(x) then 0 else ((even odd) -(x,1))
+                                            in (odd 1)```), 1, "simple-letrec-4");
+         
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
 simpleArithmeticTests();
 nestedArithmeticTests();
 simpleVariableTests();
