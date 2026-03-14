@@ -100,9 +100,20 @@ function letBodyRHSEvalTests() {
 
 function nestedLetTests() {
     try {
-        assert.equal(Interpreter.parse("let x = 3 in let y = 4 in -(x,y)"), -1, "simple-nested-let")
-        assert.equal(Interpreter.parse("let x = 3 in let x = 4 in x"), 4, "check-shadowing-in-body")
-        assert.equal(Interpreter.parse("let x = 3 in let x = -(x,1) in x"), 2, "check-shadowing-in-rhs")
+        assert.equal(Interpreter.parse("let x = 3 in let y = 4 in -(x,y)"), -1, "simple-nested-let");
+        assert.equal(Interpreter.parse("let x = 3 in let x = 4 in x"), 4, "check-shadowing-in-body");
+        assert.equal(Interpreter.parse("let x = 3 in let x = -(x,1) in x"), 2, "check-shadowing-in-rhs");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function multipleLetArguments() {
+    try {
+        assert.equal(Interpreter.parse("let a = 2 b = 3 in -(b,a)"), 1, "multiple-argument-diff");
+        assert.equal(Interpreter.parse("let a = -(6,4) b = 3 in -(b,a)"), 1, "multiple-argument-diff-in-1st-arg");
+        assert.equal(Interpreter.parse("let a = 2 b = -(7,4) in -(b,a)"), 1, "multiple-argument-diff-in-2nd-arg");
+        assert.equal(Interpreter.parse("let a = 2 b = 3 c = 4 in -(c,-(b,a))"), 3, "multiple-argument-diff-in-2nd-arg");
     } catch (error) {
         console.error("Error: "+error.message);
     }
@@ -120,3 +131,4 @@ armsOfIfTests2();
 simpleLetTests();
 letBodyRHSEvalTests();
 nestedLetTests();
+multipleLetArguments();
