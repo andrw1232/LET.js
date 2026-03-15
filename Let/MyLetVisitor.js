@@ -1,5 +1,5 @@
 // custom classes
-import * as Env from './Env.js';
+import Env from './Env.js';
 import expVal from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -10,40 +10,33 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv(["x"], [expVal.numVal(10)],this.env);
-        this.env = Env.extendEnv(["v"], [expVal.numVal(5)],this.env);
-        this.env = Env.extendEnv(["i"], [expVal.numVal(1)],this.env);
+        this.env = Env.extendEnv(["x"], [expVal.numVal(10)], this.env);
+        this.env = Env.extendEnv(["v"], [expVal.numVal(5)], this.env);
+        this.env = Env.extendEnv(["i"], [expVal.numVal(1)], this.env);
     }
 
     // START
     visitStart(ctx) {
-        // console.log("start");
-        // console.log(ctx.getPayload());
-        // console.log(ctx.children[0].getText());
         return this.visitChildren(ctx)[0].val;
     }
 
 
     // NUM
     visitConst(ctx) {
-        //console.log("const");
-
         try {
             var numVal = Number.parseFloat(ctx.getText());
             return expVal.numVal(numVal);
         } catch (error) {
-            throw new Error("Invalid number");
+            console.log(error.message);
         }
-
     }
 
 
     // DIFF
-    visitDiffexp(ctx) {
-        // console.log("diff");
+    visitDiff(ctx) {
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-        //console.log("left:"+left+"   right: "+right);
+
         if (expVal.isNum(left) && expVal.isNum(right)) {
             return expVal.numVal(left.val-right.val);
         } else {
@@ -55,7 +48,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // ZERO?
     visitZero(ctx) {
-        // console.log("zero?");
+        // compare the number to numval(0)
         if (expVal.numEqual(this.visit(ctx.children[2]), expVal.numVal(0))) {
             return expVal.boolVal(true);
         }
@@ -65,14 +58,16 @@ export default class MyLetVisitor extends LetVisitor {
 
     // IF ELSE THEN
     visitIf(ctx) {
-        // console.log("if");
 	    var conditional = this.visit(ctx.children[1]);
+
         if (expVal.isBool(conditional)) { // ensure legal input
+
             if (conditional.val) { // conditional is true
                 return this.visit(ctx.children[3]);
             } else { // conditional is false
                 return this.visit(ctx.children[5]);
             }
+
         } else {
             throw new Error("Non boolean value to if exp");
         }
@@ -82,16 +77,18 @@ export default class MyLetVisitor extends LetVisitor {
 
     // VAR
     visitVar(ctx) {
-        // console.log("var");
-        return Env.applyEnv(this.env, ctx.getText());
+        var result = Env.applyEnv(this.env, ctx.getText());
+        //console.log("var: " + typeof(result));
+        return result;
     }
 
 
     // LET
     visitLet(ctx) {
 
-        const localEnv = Env.envCopy(this.env);
+        //const localEnv = Env.envCopy(this.env);
 
+        // could write a recursive function for this I suppose? It's just building the list of inputs
         var variableArr = [];
         for (let i = 1; i < ctx.children.length - 4; i = i+3) {
             variableArr.unshift(ctx.children[i].getText());
@@ -101,11 +98,12 @@ export default class MyLetVisitor extends LetVisitor {
         for (let i = 3; i < ctx.children.length - 2; i = i+3) {
            valueArr.unshift(this.visit(ctx.children[i]));
         }
+ 
 
-
-        this.env = Env.extendEnv(variableArr, valueArr, localEnv);
+        this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
-        return this.visit(ctx.children[ctx.children.length-1]);
+        const result = this.visit(ctx.children[ctx.children.length-1]);
+        return result;
     }
 
     // PROC
@@ -124,12 +122,12 @@ export default class MyLetVisitor extends LetVisitor {
         var rand = this.visit(ctx.children[2]); // the argument
 
 
-        var localEnv = Env.envCopy(this.env); // save the current local env
+        //var localEnv = Env.envCopy(this.env); // save the current local env
 
-        this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environemtn as the procedures environment with a binding for the argument.
+        this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
         var result = this.visit(rator.val[1]); // resolve the procedure
 
-        this.env = localEnv; // put the current env back
+        //this.env = localEnv; // put the current env back
         return result;
         
     }

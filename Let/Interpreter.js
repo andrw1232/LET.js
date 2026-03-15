@@ -71,7 +71,7 @@ export default class LetInterpreter {
                 callback(null, result);
             } catch (error) {
                 console.error(error);
-                return callback(new repl.Recoverable(error));
+                return callback(new repl.Recoverable(error)); // MAKE THIS NON RECOVERABLE???
             }
 
         } catch (error) {

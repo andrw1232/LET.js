@@ -175,3 +175,6 @@ letBodyRHSEvalTests();
 nestedLetTests();
 multipleLetArgumentsTests();
 basicProcTests();
+
+yCombinatorTest();
+letrecTests();

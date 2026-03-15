@@ -10,14 +10,14 @@ npm i antlr4@4.9.2
 grammar Let;
 start: exp;
 exp: Number #const // -> numval
-    | '-''('exp','exp')' #diffexp // -> numval
+    | '-''('exp','exp')' #diff // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
-    | 'proc' '(' ID ')' exp #proc
-    | '(' exp exp ')' #call
-    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec
+    | 'proc' '(' ID ')' exp #proc // -> procval
+    | '(' exp exp ')' #call // expval
+    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec // -> letexp
 ;
 Number: '-'? DIGIT+ ('.' DIGIT+ )?;
 fragment DIGIT: [0-9];
