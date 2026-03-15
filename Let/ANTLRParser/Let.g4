@@ -16,8 +16,8 @@ exp: Number #const // -> numval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
     | 'proc' '(' ID ')' exp #proc // -> procval
-    | '(' exp exp ')' #call // expval
-    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec // -> letexp
+    | '(' exp exp ')' #call // -> expval
+    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec // -> expval
 ;
 Number: '-'? DIGIT+ ('.' DIGIT+ )?;
 fragment DIGIT: [0-9];

@@ -152,10 +152,14 @@ function letrecTests() {
     try {
         assert.equal(Interpreter.parse("letrec f(x) = -(x,1) in (f 33)"), 32, "simple-letrec-1");
         assert.equal(Interpreter.parse("letrec f(x) = if zero?(x)  then 0 else -((f -(x,1)), -2) in (f 4)"), 8, "simple-letrec-2");
-        assert.equal(Interpreter.parse("let m = -5 in letrec f(x) = if zero?(x) then 0 else -((f -(x,1)), m) in (f 4"), 20, "simple-letrec-3");
-        assert.equal(Interpreter.parse(```letrec even(odd)  = proc(x) if zero?(x) then 1 else (odd -(x,1))
-                                            in letrec  odd(x)  = if zero?(x) then 0 else ((even odd) -(x,1))
-                                            in (odd 1)```), 1, "simple-letrec-4");
+        assert.equal(Interpreter.parse("let m = -5 in letrec f(x) = if zero?(x) then 0 else -((f -(x,1)), m) in (f 4)"), 20, "simple-letrec-3");
+        assert.equal(Interpreter.parse(```letrec even(odd) = proc(x) if zero?(x) 
+                                                                        then 1 
+                                                                        else (odd -(x,1))
+                                            in letrec odd(x) = if zero?(x) 
+                                                                    then 0 
+                                                                    else ((even odd) -(x,1))
+                                                in (odd 1)```), 1, "nested-letrec-1");
          
     } catch (error) {
         console.error("Error: "+error.message);
@@ -175,6 +179,5 @@ letBodyRHSEvalTests();
 nestedLetTests();
 multipleLetArgumentsTests();
 basicProcTests();
-
 yCombinatorTest();
 letrecTests();

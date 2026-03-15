@@ -1,4 +1,4 @@
-
+import expVal from './Datatypes.js';
 
 export default class Env {
 
@@ -49,8 +49,15 @@ export default class Env {
     }
 
 
-    static extendRecEnv(procName, procVar, procBody, env) {
-
+    static extendRecEnv(procName, boundVar, procBody, env) {
+        
+        return (searchVar) => {
+            if (searchVar == procName) {
+                return expVal.procVal([boundVar, procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
+            } else {
+                return env(searchVar);
+            }
+        }
     }
 
 

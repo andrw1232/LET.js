@@ -27,7 +27,7 @@ export default class MyLetVisitor extends LetVisitor {
             var numVal = Number.parseFloat(ctx.getText());
             return expVal.numVal(numVal);
         } catch (error) {
-            console.log(error.message);
+            console.error("Error: "+error.message);
         }
     }
 
@@ -78,7 +78,6 @@ export default class MyLetVisitor extends LetVisitor {
     // VAR
     visitVar(ctx) {
         var result = Env.applyEnv(this.env, ctx.getText());
-        //console.log("var: " + typeof(result));
         return result;
     }
 
@@ -121,14 +120,34 @@ export default class MyLetVisitor extends LetVisitor {
         var rator = this.visit(ctx.children[1]); // the procedure
         var rand = this.visit(ctx.children[2]); // the argument
 
-
-        //var localEnv = Env.envCopy(this.env); // save the current local env
+        //console.log(this.env);
 
         this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
+        //console.log(rator);
+        //console.log(rand);
         var result = this.visit(rator.val[1]); // resolve the procedure
 
-        //this.env = localEnv; // put the current env back
-        return result;
-        
+        return result;   
     }
+
+
+    // LETREC
+    visitLetrec(ctx) {
+
+        //console.log(ctx.getText());
+
+        var procName = ctx.children[1].getText() // proc name
+        var boundVar = ctx.children[3].getText() // bound var
+        var procBody = ctx.children[6] // proc body
+        //ctx.children[8] // letrec body
+
+        this.env = Env.extendRecEnv(procName, boundVar, procBody, this.env);
+
+        //console.log(ctx.children[8].getText());
+        var result = this.visit(ctx.children[8]);
+
+        return result;
+    }
+
+
 }
