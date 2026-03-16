@@ -138,6 +138,7 @@ function multiupleArgProcTests() {
     try {
         assert.equal(Interpreter.parse("(proc(x,y) -(x,y) 30 13)"), 17, "two-argument-proc");
         assert.equal(Interpreter.parse("(proc() 42)"), 42, "zero-argument-proc");
+        assert.equal(Interpreter.parse("(proc(a,b,c,d,e,f) -(-(-(a,b), -(c,d)), -(e,f)) 7 3 4 -8 63 13 )"), -58, "six-argument-proc");
     } catch (error) {
         console.error("Error: "+error.message);
     }
