@@ -50,7 +50,7 @@ export default class expVal {
     static procVal(input) {
         var exp = new expVal();
         exp.type = "proc";
-        exp.val = input; // array of: [the bound var ID, body (that needs to be visited), and env]
+        exp.val = input; // array of: [[the bound var IDs], body (that needs to be visited), and env]
         return exp;
     }
 

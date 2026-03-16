@@ -13,6 +13,7 @@ function simpleArithmeticTests() {
         assert.equal(Interpreter.parse("-(44,33)"), 11, "simple-arith-1");
     } catch (err) {
         console.error("Error: "+err);
+        console.log(err);
     }
 }
 
@@ -133,6 +134,16 @@ function basicProcTests() {
     }
 }
 
+function multiupleArgProcTests() {
+    try {
+        assert.equal(Interpreter.parse("(proc(x,y) -(x,y) 30 13)"), 17, "two-argument-proc");
+        assert.equal(Interpreter.parse("(proc() 42)"), 42, "zero-argument-proc");
+        assert.equal(Interpreter.parse("(proc(a,b,c,d,e,f) -(-(-(a,b), -(c,d)), -(e,f)) 7 3 4 -8 63 13 )"), -58, "six-argument-proc");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
 function yCombinatorTest() {
     try {
         assert.equal(Interpreter.parse("let fix = proc (f) let d = proc (x) proc (z) ((f (x x)) z) in proc (n) ((f (d d)) n) in let t4m = proc (f) proc(x) if zero?(x) then 0 else -((f -(x,1)),-4) in let times4 = (fix t4m) in (times4 3)"), 12, "y-combinator-1");
@@ -168,5 +179,3 @@ letBodyRHSEvalTests();
 nestedLetTests();
 multipleLetArgumentsTests();
 basicProcTests();
-yCombinatorTest();
-letrecTests();

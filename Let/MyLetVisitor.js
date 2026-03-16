@@ -1,5 +1,6 @@
 // custom classes
 import Env from './Env.js';
+import Env from './Env.js';
 import expVal from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -99,7 +100,8 @@ export default class MyLetVisitor extends LetVisitor {
         for (let i = 3; i < ctx.children.length - 2; i = i+3) {
            valueArr.unshift(this.visit(ctx.children[i]));
         }
- 
+
+
         this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
         const result = this.visit(ctx.children[ctx.children.length-1]);
@@ -108,9 +110,14 @@ export default class MyLetVisitor extends LetVisitor {
 
     // PROC
     visitProc(ctx) {
-        var variable = ctx.children[2].getText(); // get the ID
-        var body = ctx.children[4]; // save the body but don't visit it yet
-        var func = expVal.procVal( [variable, body, this.env] ); // save them all in a proc value
+
+        var boundVars = []; // save all the bound IDs for the arguments in an array
+        for (let i = 2; i < ctx.children.length-2; i = i+2) {
+            boundVars.push(ctx.children[i].getText());            
+        }
+
+        var body = ctx.children[ctx.children.length-1]; // save the body but don't visit it yet
+        var func = expVal.procVal( [boundVars, body, this.env] ); // save them all in a proc value
         return func;
     }
 
@@ -120,13 +127,15 @@ export default class MyLetVisitor extends LetVisitor {
         // console.log("call");
 
         var rator = this.visit(ctx.children[1]); // the procedure
-        var rand = this.visit(ctx.children[2]); // the argument
 
-        var currentEnv = this.env;
-        this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
-        //console.log(rator);
-        //console.log(rand);
-        
+        var rands = [];
+        for (let i = 2; i < ctx.children.length-1; i++) {
+            rands.push(this.visit(ctx.children[i]));
+        }
+
+        var localEnv = this.env; // save the current local env
+
+        this.env = Env.extendEnv(rator.val[0], rands, rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
         var result = this.visit(rator.val[1]); // resolve the procedure
         this.env = currentEnv;
 

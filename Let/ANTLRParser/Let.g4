@@ -11,13 +11,14 @@ grammar Let;
 start: exp;
 exp: Number #const // -> numval
     | '-''('exp','exp')' #diff // -> numval
+    | '-''('exp','exp')' #diff // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
-    | 'proc' '(' ID ')' exp #proc // -> procval
-    | '(' exp exp ')' #call // -> expval
-    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec // -> expval
+    | 'proc' '(' (ID (',' ID)* )? ')' exp #proc // -> procval // -> procval
+    | '(' exp exp* ')' #call // -> expval
+    | 'letrec' ID '(' ID ')' '=' exp 'in' exp #letrec // -> expval // -> expval
 ;
 Number: '-'? DIGIT+ ('.' DIGIT+ )?;
 fragment DIGIT: [0-9];

@@ -24,6 +24,15 @@ export default class Env {
             throw new Error("No binding found for "+searchVar);
         }
     }
+    /**
+     * a function that creates a new and empty environment object
+     * @returns an empty environment 
+     */
+    static emptyEnv() {
+        return (searchVar) => {
+            throw new Error("No binding found for "+searchVar);
+        }
+    }
 
 
     /**
