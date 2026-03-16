@@ -64,14 +64,24 @@ export default class Env {
     }
 
 
-    static extendRecEnv(procName, boundVar, procBody, env) {
+    static extendRecEnv(procNames, boundVars, procBodies, env) {
         
         return (searchVar) => {
-            if (searchVar == procName) {
-                return expVal.procVal([[boundVar], procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
+            if (procNames.length == 0 || boundVars.length == 0 || procBodies.length == 0) {
+                return env(searchVar); // nothing left to check here, recurse down
+
+            } else if (searchVar == procNames[0]) {
+                return expVal.procVal([[boundVars[0]], procBodies[0], this.extendRecEnv(procNames, boundVars, procBodies, env)]);
             } else {
-                return env(searchVar);
-            }
+                var removedProcName = procNames.shift();
+                var removedBoundVar = boundVars.shift();
+                var removedProcBody = procBodies.shift();
+                var result = this.extendRecEnv(procNames, boundVars, procBodies, env)(searchVar);
+                procNames.unshift(removedProcName);
+                boundVars.unshift(removedBoundVar);
+                procBodies.unshift(removedProcBody);
+                return result;
+                }
         }
     }
 

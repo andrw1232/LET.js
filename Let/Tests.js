@@ -134,7 +134,7 @@ function basicProcTests() {
     }
 }
 
-function multiupleArgProcTests() {
+function multipleArgProcTests() {
     try {
         assert.equal(Interpreter.parse("(proc(x,y) -(x,y) 30 13)"), 17, "two-argument-proc");
         assert.equal(Interpreter.parse("(proc() 42)"), 42, "zero-argument-proc");
@@ -166,6 +166,25 @@ function letrecTests() {
     }
 }
 
+
+function multipleArgLetrecTests() {
+    try {
+        assert.equal(Interpreter.parse("letrec even(x) = if zero?(x) then zero?(0) else (odd -(x,1)) odd(x) = if zero?(x) then zero?(1) else (even -(x,1)) in (odd 13)"), true,"multiple-arg-letrec-1");
+    
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function multipleArgLetrecProcsTests() {
+    try {
+        assert.equal(Interpreter.parse("letrec add(x,y) = -(x,-(0,y)) times(x,y) = if zero?(x) then 0 else (add (times -(x,1) y) y) fact(n) = if zero?(n) then 1 else (times n (fact -(n, 1))) in (fact 5)"), 120,"multiple-arg-letrec's-procs-1");
+
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
 simpleArithmeticTests();
 nestedArithmeticTests();
 simpleVariableTests();
@@ -179,6 +198,7 @@ letBodyRHSEvalTests();
 nestedLetTests();
 multipleLetArgumentsTests();
 basicProcTests();
-multiupleArgProcTests();
+multipleArgProcTests();
 yCombinatorTest();
 letrecTests();
+multipleArgLetrecTests();

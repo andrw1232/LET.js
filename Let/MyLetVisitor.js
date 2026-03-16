@@ -141,18 +141,27 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
+
     // LETREC
     visitLetrec(ctx) {
 
-        //console.log(ctx.getText());
+        var procNames = [];
+        var boundVars = [];
+        var procBodies = [];
 
-        var procName = ctx.children[1].getText() // proc name
-        var boundVar = ctx.children[3].getText() // bound var
-        var procBody = ctx.children[6] // proc body
+        for (let i = 1; i < ctx.children.length-2; i = i+6) {
+            procNames.push(ctx.children[i].getText());
+        }
+        for (let i = 3; i < ctx.children.length-2; i = i+6) {
+            boundVars.push(ctx.children[i].getText());
+        }
+        for (let i = 6; i < ctx.children.length-2; i = i+6) {
+            procBodies.push(ctx.children[i]);
+        }
 
-        this.env = Env.extendRecEnv(procName, boundVar, procBody, this.env);
+        this.env = Env.extendRecEnv(procNames, boundVars, procBodies, this.env);
 
-        var result = this.visit(ctx.children[8]);
+        var result = this.visit(ctx.children[ctx.children.length-1]);
 
         return result;
     }
