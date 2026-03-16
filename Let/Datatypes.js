@@ -54,6 +54,7 @@ export default class expVal {
         return exp;
     }
 
+    
     static isProc(input) {
         if (input.type == "proc") {
             return true;

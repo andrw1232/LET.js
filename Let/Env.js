@@ -9,6 +9,8 @@ export default class Env {
      * @returns the value associated with the variable or null if no binding is in the environment.
      */
     static applyEnv(env, searchVar) {
+        //console.log("var: "+searchVar);
+        //console.log(env.toString());
         return env(searchVar);
     }
 
@@ -32,11 +34,15 @@ export default class Env {
      * @returns a new environment with a new binding of the variable with the value
      */
     static extendEnv(variableArr, valueArr, env) {
+        //console.log("extending");
         return (searchVar) => {
+
             if (variableArr.length == 0 || valueArr.length == 0) {
                 return env(searchVar); // nothing left to check in the variableArray, so recurse to prev env
+
             } else if (searchVar == variableArr[0]) {
                 return valueArr[0]; // variable found!
+
             } else {
                 var removedVar = variableArr.shift(); // remove the first elements from each variable value pair to recurse down without them in the array object
                 var removedVal = valueArr.shift();
@@ -50,6 +56,7 @@ export default class Env {
 
 
     static extendRecEnv(procName, boundVar, procBody, env) {
+        //console.log(boundVar + " : "+procBody[1]);
         
         return (searchVar) => {
             if (searchVar == procName) {
@@ -59,19 +66,5 @@ export default class Env {
             }
         }
     }
-
-
-
-    // makes a deep copy of an environment
-    static envCopy(arr) {
-        //console.log(arr);
-        var newArray = new Array(arr.length);
-        for (let i = 0; i < newArray.length; i++) {
-            newArray[i] = [arr[i][0], arr[i][1]];
-        }
-        return newArray;
-    }
-
-
 
 }

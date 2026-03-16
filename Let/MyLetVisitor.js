@@ -25,6 +25,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitConst(ctx) {
         try {
             var numVal = Number.parseFloat(ctx.getText());
+            // console.log(numVal);
             return expVal.numVal(numVal);
         } catch (error) {
             console.error("Error: "+error.message);
@@ -34,10 +35,12 @@ export default class MyLetVisitor extends LetVisitor {
 
     // DIFF
     visitDiff(ctx) {
+        // console.log("dif");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
 
         if (expVal.isNum(left) && expVal.isNum(right)) {
+            // console.log(left.val +" : "+right.val);
             return expVal.numVal(left.val-right.val);
         } else {
             throw new Error("Non number value to diff exp");
@@ -84,7 +87,6 @@ export default class MyLetVisitor extends LetVisitor {
 
     // LET
     visitLet(ctx) {
-
         //const localEnv = Env.envCopy(this.env);
 
         // could write a recursive function for this I suppose? It's just building the list of inputs
@@ -98,7 +100,6 @@ export default class MyLetVisitor extends LetVisitor {
            valueArr.unshift(this.visit(ctx.children[i]));
         }
  
-
         this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
         const result = this.visit(ctx.children[ctx.children.length-1]);
@@ -116,16 +117,18 @@ export default class MyLetVisitor extends LetVisitor {
 
     // CALL
     visitCall(ctx) {
+        // console.log("call");
 
         var rator = this.visit(ctx.children[1]); // the procedure
         var rand = this.visit(ctx.children[2]); // the argument
 
-        //console.log(this.env);
-
+        var currentEnv = this.env;
         this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
         //console.log(rator);
         //console.log(rand);
+        
         var result = this.visit(rator.val[1]); // resolve the procedure
+        this.env = currentEnv;
 
         return result;   
     }
@@ -139,15 +142,15 @@ export default class MyLetVisitor extends LetVisitor {
         var procName = ctx.children[1].getText() // proc name
         var boundVar = ctx.children[3].getText() // bound var
         var procBody = ctx.children[6] // proc body
-        //ctx.children[8] // letrec body
+        // ctx.children[8] // letrec body
+        // console.log(procBody);
 
         this.env = Env.extendRecEnv(procName, boundVar, procBody, this.env);
 
-        //console.log(ctx.children[8].getText());
+        // console.log(ctx.children[8].getText());
         var result = this.visit(ctx.children[8]);
 
         return result;
     }
-
 
 }
