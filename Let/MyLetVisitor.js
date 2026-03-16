@@ -1,6 +1,5 @@
 // custom classes
 import Env from './Env.js';
-import Env from './Env.js';
 import expVal from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -88,7 +87,6 @@ export default class MyLetVisitor extends LetVisitor {
 
     // LET
     visitLet(ctx) {
-        //const localEnv = Env.envCopy(this.env);
 
         // could write a recursive function for this I suppose? It's just building the list of inputs
         var variableArr = [];
@@ -101,7 +99,6 @@ export default class MyLetVisitor extends LetVisitor {
            valueArr.unshift(this.visit(ctx.children[i]));
         }
 
-
         this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
         const result = this.visit(ctx.children[ctx.children.length-1]);
@@ -113,10 +110,11 @@ export default class MyLetVisitor extends LetVisitor {
 
         var boundVars = []; // save all the bound IDs for the arguments in an array
         for (let i = 2; i < ctx.children.length-2; i = i+2) {
-            boundVars.push(ctx.children[i].getText());            
+            boundVars.push(ctx.children[i].getText());
         }
 
         var body = ctx.children[ctx.children.length-1]; // save the body but don't visit it yet
+        //console.log(boundVars);
         var func = expVal.procVal( [boundVars, body, this.env] ); // save them all in a proc value
         return func;
     }
@@ -137,7 +135,7 @@ export default class MyLetVisitor extends LetVisitor {
 
         this.env = Env.extendEnv(rator.val[0], rands, rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
         var result = this.visit(rator.val[1]); // resolve the procedure
-        this.env = currentEnv;
+        this.env = localEnv;
 
         return result;   
     }
@@ -151,12 +149,9 @@ export default class MyLetVisitor extends LetVisitor {
         var procName = ctx.children[1].getText() // proc name
         var boundVar = ctx.children[3].getText() // bound var
         var procBody = ctx.children[6] // proc body
-        // ctx.children[8] // letrec body
-        // console.log(procBody);
 
         this.env = Env.extendRecEnv(procName, boundVar, procBody, this.env);
 
-        // console.log(ctx.children[8].getText());
         var result = this.visit(ctx.children[8]);
 
         return result;

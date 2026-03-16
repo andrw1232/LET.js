@@ -65,11 +65,10 @@ export default class Env {
 
 
     static extendRecEnv(procName, boundVar, procBody, env) {
-        //console.log(boundVar + " : "+procBody[1]);
         
         return (searchVar) => {
             if (searchVar == procName) {
-                return expVal.procVal([boundVar, procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
+                return expVal.procVal([[boundVar], procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
             } else {
                 return env(searchVar);
             }
