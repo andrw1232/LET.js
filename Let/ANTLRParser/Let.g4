@@ -10,7 +10,7 @@ npm i antlr4@4.9.2
 grammar Let;
 start: exp;
 exp: Number #const // -> numval
-    | '-''('exp','exp')' #diffexp // -> numval
+    | '-''('exp','exp')' #diff // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID

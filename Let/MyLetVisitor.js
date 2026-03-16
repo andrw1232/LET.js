@@ -1,5 +1,5 @@
 // custom classes
-import * as Env from './Env.js';
+import Env from './Env.js';
 import expVal from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -26,10 +26,10 @@ export default class MyLetVisitor extends LetVisitor {
 
     // NUM
     visitConst(ctx) {
-        //console.log("const");
-
+        
         try {
             var numVal = Number.parseFloat(ctx.getText());
+            //console.log(numVal);
             return expVal.numVal(numVal);
         } catch (error) {
             throw new Error("Invalid number");
@@ -39,8 +39,8 @@ export default class MyLetVisitor extends LetVisitor {
 
 
     // DIFF
-    visitDiffexp(ctx) {
-        // console.log("diff");
+    visitDiff(ctx) {
+        //console.log("diff");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
         //console.log("left:"+left+"   right: "+right);
@@ -90,8 +90,6 @@ export default class MyLetVisitor extends LetVisitor {
     // LET
     visitLet(ctx) {
 
-        const localEnv = Env.envCopy(this.env);
-
         var variableArr = [];
         for (let i = 1; i < ctx.children.length - 4; i = i+3) {
             variableArr.unshift(ctx.children[i].getText());
@@ -103,7 +101,7 @@ export default class MyLetVisitor extends LetVisitor {
         }
 
 
-        this.env = Env.extendEnv(variableArr, valueArr, localEnv);
+        this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
         return this.visit(ctx.children[ctx.children.length-1]);
     }
@@ -123,8 +121,7 @@ export default class MyLetVisitor extends LetVisitor {
         var rator = this.visit(ctx.children[1]); // the procedure
         var rand = this.visit(ctx.children[2]); // the argument
 
-
-        var localEnv = Env.envCopy(this.env); // save the current local env
+        var localEnv = this.env; // save the current local env
 
         this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environemtn as the procedures environment with a binding for the argument.
         var result = this.visit(rator.val[1]); // resolve the procedure
