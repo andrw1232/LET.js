@@ -134,6 +134,15 @@ function basicProcTests() {
     }
 }
 
+function multiupleArgProcTests() {
+    try {
+        assert.equal(Interpreter.parse("(proc(x,y) -(x,y) 30 13)"), 17, "two-argument-proc");
+        assert.equal(Interpreter.parse("(proc() 42)"), 42, "zero-argument-proc");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
 simpleArithmeticTests();
 nestedArithmeticTests();
 simpleVariableTests();
@@ -147,3 +156,4 @@ letBodyRHSEvalTests();
 nestedLetTests();
 multipleLetArgumentsTests();
 basicProcTests();
+multiupleArgProcTests();
