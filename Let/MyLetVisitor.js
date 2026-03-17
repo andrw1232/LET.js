@@ -157,7 +157,6 @@ export default class MyLetVisitor extends LetVisitor {
             procNames.push(ctx.children[procIndex].getText());
             procIndex = procIndex + 2; // skip past the mandatory open bracket
 
-
             if (ctx.children[procIndex].getText() == ')') {
                 procIndex = procIndex + 2; // skip past the closed bracket and '='
             } else {
@@ -165,18 +164,20 @@ export default class MyLetVisitor extends LetVisitor {
                 var procVars = []; // make an array to hold all of this procedures bound variables
 
                 while(ctx.children[procIndex].getText() != ')') { // loop until we hit the closing brace
-
+                    
                     if(ctx.children[procIndex].getText() != ',') { // add all the variables (everything except commas)
                         procVars.push(ctx.children[procIndex].getText());
                     }
-                    procIndex++
+                    procIndex++; // next char within the parenthesis
                 }
             }
+            procIndex++; // move past the closed parenthesis
+            procIndex++; // move past the '='
 
             boundVars.push(procVars);
             procBodies.push(ctx.children[procIndex]); // add the proc body
+
             procIndex++; // go to the next proc or 'in'
-                
         }
         
         

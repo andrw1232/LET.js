@@ -26,7 +26,7 @@ export default class LetInterpreter {
 
     // most basic parsing of a string
     static parse(inputData) {
-
+        
         const chars = new antlr4.InputStream(inputData);
         const lexer = new LetLexer(chars);
         const tokens = new antlr4.CommonTokenStream(lexer);

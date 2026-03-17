@@ -200,7 +200,6 @@ multipleLetArgumentsTests();
 basicProcTests();
 multipleArgProcTests();
 yCombinatorTest();
-console.log("here");
 letrecTests();
 multipleArgLetrecTests();
 multipleArgLetrecProcsTests();
