@@ -16,9 +16,9 @@ exp: Number #const // -> numval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
-    | 'proc' '(' (ID (',' ID)* )? ')' exp #proc // -> procval // -> procval
+    | 'proc' '(' (ID (',' ID)* )? ')' exp #proc // -> procval 
     | '(' exp exp* ')' #call // -> expval
-    | 'letrec' (ID '(' ID ')' '=' exp (ID '(' ID ')' '=' exp)*)? 'in' exp #letrec // -> expval // -> expval
+    | 'letrec' (ID '(' (ID (',' ID)*)? ')' '=' exp (ID '(' (ID (',' ID)*)? ')' '=' exp)*)? 'in' exp #letrec // -> expval
 ;
 Number: '-'? DIGIT+ ('.' DIGIT+ )?;
 fragment DIGIT: [0-9];

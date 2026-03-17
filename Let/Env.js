@@ -64,6 +64,13 @@ export default class Env {
     }
 
 
+    /**
+     * Extends an environment with a variable number of procedures
+     * @param {*} procNames an array of proc names
+     * @param {*} boundVars an array of arrays of bound variables, each element the array of bound variables for a single proc
+     * @param {*} procBodies an array of procedure bodies
+     * @param {*} env the environment to extend
+     */
     static extendRecEnv(procNames, boundVars, procBodies, env) {
         
         return (searchVar) => {
@@ -71,7 +78,7 @@ export default class Env {
                 return env(searchVar); // nothing left to check here, recurse down
 
             } else if (searchVar == procNames[0]) {
-                return expVal.procVal([[boundVars[0]], procBodies[0], this.extendRecEnv(procNames, boundVars, procBodies, env)]);
+                return expVal.procVal([boundVars[0], procBodies[0], this.extendRecEnv(procNames, boundVars, procBodies, env)]);
             } else {
                 var removedProcName = procNames.shift();
                 var removedBoundVar = boundVars.shift();
@@ -81,7 +88,7 @@ export default class Env {
                 boundVars.unshift(removedBoundVar);
                 procBodies.unshift(removedProcBody);
                 return result;
-                }
+            }
         }
     }
 
