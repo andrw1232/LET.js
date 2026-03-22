@@ -52,11 +52,81 @@ export default class MyLetVisitor extends LetVisitor {
         
     }
 
+    // ADD
+    visitAddexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numval(left.val + right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // MUL
+    visitMulexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numval(left.val * right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // DIV
+    visitDivexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numval(left.val / right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // UNARY MINUS
+    visitUnaryminus(ctx) {
+        var val = this.visit(ctx.children[2]);
+        if (expval.isNum(val)) {
+            return expval.numval(-1 * val.val);
+        } else {
+            throw new Error("Non number value to unary minus");
+        }
+    }
+
 
     // ZERO?
     visitZero(ctx) {
         // console.log("zero?");
         if (expval.numEqual(this.visit(ctx.children[2]), expval.numval(0))) {
+            return expval.boolval(true);
+        }
+        return expval.boolval(false);
+    }
+
+    // EQUAL?
+    visitEqual(ctx) {
+        if (expval.numEqual(this.visit(ctx.children[2]), this.visit(ctx.children[4]))) {
+            return expval.boolval(true);
+        }
+        return expval.boolval(false); 
+    }
+
+    // GREATER
+    visitGreater(ctx) {
+        if (this.visit(ctx.children[2]).val > this.visit(ctx.children[4]).val) {
+            return expval.boolval(true);
+        }
+        return expval.boolval(false);
+    }
+
+    // LESS
+    visitLess(ctx) {
+        if (this.visit(ctx.children[2]).val < this.visit(ctx.children[4]).val) {
             return expval.boolval(true);
         }
         return expval.boolval(false);
