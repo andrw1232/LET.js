@@ -179,7 +179,7 @@ function multipleArgLetrecTests() {
 function multipleArgLetrecProcsTests() {
     try {
         assert.equal(Interpreter.parse("letrec add(x,y) = -(x,-(0,y)) times(x,y) = if zero?(x) then 0 else (add (times -(x,1) y) y) fact(n) = if zero?(n) then 1 else (times n (fact -(n, 1))) in (fact 5)"), 120,"multiple-arg-letrec's-procs-1");
-
+	assert.equal(Interpreter.parse("letrec fourty(a) = if zero?(a) then 42 else (dif a 1) dif(b,c) = (fourty -(b,c)) in (fourty 4)"),42,"different-proc-arg-count" )
     } catch (error) {
         console.error("Error: "+error.message);
     }
