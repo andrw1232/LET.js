@@ -18,7 +18,7 @@ exp: Number #const // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
     | 'equal?' '('exp','exp')' #equal // -> boolval
     | 'greater?' '('exp','exp')' #greater // -> boolval
-    | 'less?' '('exp','exp')' #less// -> boolval
+    | 'lesser?' '('exp','exp')' #less// -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
@@ -27,4 +27,3 @@ Number: '-'? DIGIT+ ('.' DIGIT+ )?;
 fragment DIGIT: [0-9];
 ID: [a-zA-Z] ([a-zA-Z0-9] | '?' | '_' | '-')* ;
 WHITESPACE : [\p{White_Space}]+ -> skip;
-//([a-zA-Z0-9]|'_'| '?'| '-')+

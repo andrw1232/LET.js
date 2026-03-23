@@ -80,6 +80,9 @@ export default class MyLetVisitor extends LetVisitor {
     visitDivexp(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
+        if (right.val == 0) {
+            throw new Error("division by zero");
+        }
 
         if (expval.isNum(left) && expval.isNum(right)) {
             return expval.numval(left.val / right.val);
@@ -110,8 +113,13 @@ export default class MyLetVisitor extends LetVisitor {
 
     // EQUAL?
     visitEqual(ctx) {
-        if (expval.numEqual(this.visit(ctx.children[2]), this.visit(ctx.children[4]))) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.numEqual(left, right)) {
             return expval.boolval(true);
+        } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
+            return expval.boolean(true);
         }
         return expval.boolval(false); 
     }
