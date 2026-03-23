@@ -18,7 +18,7 @@ exp: Number #const // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
     | 'equal?' '('exp','exp')' #equal // -> boolval
     | 'greater?' '('exp','exp')' #greater // -> boolval
-    | 'lesser?' '('exp','exp')' #less// -> boolval
+    | 'lesser?' '('exp','exp')' #lesser // -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
