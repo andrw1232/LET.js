@@ -5,7 +5,7 @@ export default class expVal {
 
     // num vals
     static numVal(input) {
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "num";
         exp.val = input;
         return exp;
@@ -67,7 +67,7 @@ export default class expVal {
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
         if (typeof(input) === "number") {
-            return this.numVal(input); // is the 'this.' needed?
+            return this.numVal(input);
         }
         if (typeof(input) === "boolean") {
             return this.boolVal(input);

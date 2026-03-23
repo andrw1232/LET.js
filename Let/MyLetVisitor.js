@@ -10,9 +10,9 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv(["x"], [expVal.numVal(10)], this.env);
-        this.env = Env.extendEnv(["v"], [expVal.numVal(5)], this.env);
-        this.env = Env.extendEnv(["i"], [expVal.numVal(1)], this.env);
+        this.env = Env.extendEnv("x", expval.numVal(10),this.env);
+        this.env = Env.extendEnv("v", expval.numVal(5),this.env);
+        this.env = Env.extendEnv("i", expval.numVal(1),this.env);
     }
 
     // START
@@ -25,8 +25,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitConst(ctx) {
         try {
             var numVal = Number.parseFloat(ctx.getText());
-            // console.log(numVal);
-            return expVal.numVal(numVal);
+            return expval.numVal(numVal);
         } catch (error) {
             console.error("Error: "+error.message);
         }
@@ -38,24 +37,101 @@ export default class MyLetVisitor extends LetVisitor {
         // console.log("dif");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-
-        if (expVal.isNum(left) && expVal.isNum(right)) {
-            // console.log(left.val +" : "+right.val);
-            return expVal.numVal(left.val-right.val);
+        //console.log("left:"+left+"   right: "+right);
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val-right.val);
         } else {
             throw new Error("Non number value to diff exp");
         }
         
     }
 
+    // ADD
+    visitAddexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val + right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // MUL
+    visitMulexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val * right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // DIV
+    visitDivexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+        if (right.val == 0) {
+            throw new Error("division by zero");
+        }
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val / right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // UNARY MINUS
+    visitUnaryminus(ctx) {
+        var val = this.visit(ctx.children[2]);
+        if (expval.isNum(val)) {
+            return expval.numVal(-1 * val.val);
+        } else {
+            throw new Error("Non number value to unary minus");
+        }
+    }
+
 
     // ZERO?
     visitZero(ctx) {
-        // compare the number to numval(0)
-        if (expVal.numEqual(this.visit(ctx.children[2]), expVal.numVal(0))) {
-            return expVal.boolVal(true);
+        // console.log("zero?");
+        if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
+            return expval.boolVal(true);
         }
-        return expVal.boolVal(false);
+        return expval.boolVal(false);
+    }
+
+    // EQUAL?
+    visitEqual(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.numEqual(left, right)) {
+            return expval.boolVal(true);
+        } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
+            return expval.boolean(true);
+        }
+        return expval.boolVal(false); 
+    }
+
+    // GREATER
+    visitGreater(ctx) {
+        if (this.visit(ctx.children[2]).val > this.visit(ctx.children[4]).val) {
+            return expval.boolVal(true);
+        }
+        return expval.boolVal(false);
+    }
+
+    // LESS
+    visitLess(ctx) {
+        if (this.visit(ctx.children[2]).val < this.visit(ctx.children[4]).val) {
+            return expval.boolVal(true);
+        }
+        return expval.boolVal(false);
     }
 
 

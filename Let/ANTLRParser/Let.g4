@@ -11,8 +11,14 @@ grammar Let;
 start: exp;
 exp: Number #const // -> numval
     | '-''('exp','exp')' #diff // -> numval
-    | '-''('exp','exp')' #diff // -> numval
+    | '+''('exp','exp')' #add // -> numval
+    | '*''('exp','exp')' #mul // -> numval
+    | '/''('exp','exp')' #div // -> numval
+    | 'minus' '('exp')' #unaryminus // -> numval
     | 'zero?' '('exp ')' #zero // -> boolval
+    | 'equal?' '('exp','exp')' #equal // -> boolval
+    | 'greater?' '('exp','exp')' #greater // -> boolval
+    | 'lesser?' '('exp','exp')' #less// -> boolval
     | 'if' exp 'then' exp 'else' exp #if // -> expval
     | ID #var // -> ID
     | 'let' (ID '=' exp)* 'in' exp #let // -> expval
