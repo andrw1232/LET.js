@@ -1,6 +1,6 @@
 // custom classes
 import Env from './Env.js';
-import expVal from './Datatypes.js';
+import expval from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
 
@@ -10,9 +10,9 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv("x", expval.numVal(10),this.env);
-        this.env = Env.extendEnv("v", expval.numVal(5),this.env);
-        this.env = Env.extendEnv("i", expval.numVal(1),this.env);
+        this.env = Env.extendEnv(["x"], [expval.numVal(10)],this.env);
+        this.env = Env.extendEnv(["v"], [expval.numVal(5)],this.env);
+        this.env = Env.extendEnv(["i"], [expval.numVal(1)],this.env);
     }
 
     // START
@@ -47,7 +47,7 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
     // ADD
-    visitAddexp(ctx) {
+    visitAdd(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
 
@@ -59,7 +59,7 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
     // MUL
-    visitMulexp(ctx) {
+    visitMul(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
 
@@ -71,7 +71,7 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
     // DIV
-    visitDivexp(ctx) {
+    visitDiv(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
         if (right.val == 0) {
@@ -112,7 +112,7 @@ export default class MyLetVisitor extends LetVisitor {
 
         if (expval.numEqual(left, right)) {
             return expval.boolVal(true);
-        } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
+        } else if (expval.isBool(left) && expval.isBool(right) && left.val && right.val) {
             return expval.boolean(true);
         }
         return expval.boolVal(false); 
@@ -139,7 +139,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitIf(ctx) {
 	    var conditional = this.visit(ctx.children[1]);
 
-        if (expVal.isBool(conditional)) { // ensure legal input
+        if (expval.isBool(conditional)) { // ensure legal input
 
             if (conditional.val) { // conditional is true
                 return this.visit(ctx.children[3]);
@@ -191,7 +191,7 @@ export default class MyLetVisitor extends LetVisitor {
 
         var body = ctx.children[ctx.children.length-1]; // save the body but don't visit it yet
         //console.log(boundVars);
-        var func = expVal.procVal( [boundVars, body, this.env] ); // save them all in a proc value
+        var func = expval.procVal( [boundVars, body, this.env] ); // save them all in a proc value
         return func;
     }
 
@@ -256,7 +256,8 @@ export default class MyLetVisitor extends LetVisitor {
             procIndex++; // go to the next proc or 'in'
         }
         
-        
+
+       
         this.env = Env.extendRecEnv(procNames, boundVars, procBodies, this.env);
         
 

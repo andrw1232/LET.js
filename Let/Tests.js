@@ -109,6 +109,7 @@ function nestedLetTests() {
     }
 }
 
+
 function multipleLetArgumentsTests() {
     try {
         assert.equal(Interpreter.parse("let a = 2 b = 3 in -(b,a)"), 1, "multiple-argument-diff");
@@ -116,17 +117,6 @@ function multipleLetArgumentsTests() {
         assert.equal(Interpreter.parse("let a = 2 b = -(7,4) in -(b,a)"), 1, "multiple-argument-diff-in-2nd-arg");
         assert.equal(Interpreter.parse("let a = 2 b = 3 c = 4 in -(c,-(b,a))"), 3, "multiple-argument-diff-in-2nd-arg");
         } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
-function mulTests() {
-    try {
-        assert.equal(Interpreter.parse("*(3,4)"), 12, "simple-mul");
-        assert.equal(Interpreter.parse("*(0,5)"), 0, "mul-by-zero");
-        assert.equal(Interpreter.parse("*(5,0)"), 0, "mul-by-zero2");
-        assert.equal(Interpreter.parse("*(-(6,3),4)"), 12, "left-exp-eval-mul");
-        assert.equal(Interpreter.parse("*(4,-(6,3))"), 12, "right-exp-eval-mul");
-    } catch (error) {
         console.error("Error: "+error.message);
     }
 }
@@ -143,29 +133,6 @@ function basicProcTests() {
         console.error("Error: "+error.message);
     }
 }
-function addTests() {
-    try {
-        assert.equal(Interpreter.parse("+(3,4)"), 7, "simple-add");
-        assert.equal(Interpreter.parse("+(-(9,6),4)"), 7, "left-exp-eval-add");
-        assert.equal(Interpreter.parse("+(4,-(9,6))"), 7, "right-exp-eval-add");
-    } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
-
-function divisionTests() {
-    try {
-        assert.throws(function() {Interpreter.parse("/(5,0)")}, "div-by-zero");
-        assert.equal(Interpreter.parse("/(12,3)"), 4, "simple-integer-div");
-        assert.equal(Interpreter.parse("/(6,12)"),0.5, "simple-fractional-div");
-        assert.equal(Interpreter.parse("/(0,12)"), 0, "zero-div-by-int");
-        assert.equal(Interpreter.parse("/(-(9,3),3)"), 2, "left-exp-eval-div");
-        assert.equal(Interpreter.parse("/(6,-(9,7))"), 3, "right-exp-eval-div");
-
-    } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
 
 function multipleArgProcTests() {
     try {
@@ -176,29 +143,10 @@ function multipleArgProcTests() {
         console.error("Error: "+error.message);
     }
 }
-function unaryMinusTests() {
-    try {
-        assert.equal(Interpreter.parse("minus(4)"), -4, "simple-unary-minus");
-        assert.equal(Interpreter.parse("minus(-(9,5))"), -4, "exp-eval-unary-minus");
-        assert.equal(Interpreter.parse("minus(-4)"), 4, "negative-unary-minus");
-    } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
 
 function yCombinatorTest() {
     try {
         assert.equal(Interpreter.parse("let fix = proc (f) let d = proc (x) proc (z) ((f (x x)) z) in proc (n) ((f (d d)) n) in let t4m = proc (f) proc(x) if zero?(x) then 0 else -((f -(x,1)),-4) in let times4 = (fix t4m) in (times4 3)"), 12, "y-combinator-1");
-    } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
-function equalTests() {
-    try {
-        assert.equal(Interpreter.parse("equal?(4,4)"), true, "simple-equal-true");
-        assert.equal(Interpreter.parse("equal?(5,4)"), false, "simple-equal-false");
-        assert.equal(Interpreter.parse("equal?(-(9,3),6)"), true, "equal-left-exp-eval");
-        assert.equal(Interpreter.parse("equal?(6,-(9,3))"), true, "equal-right-exp-eval");
     } catch (error) {
         console.error("Error: "+error.message);
     }
@@ -218,6 +166,14 @@ function letrecTests() {
     }
 }
 
+function multipleArgLetrecProcsTests() {
+    try {
+        assert.equal(Interpreter.parse("letrec add(x,y) = -(x,-(0,y)) times(x,y) = if zero?(x) then 0 else (add (times -(x,1) y) y) fact(n) = if zero?(n) then 1 else (times n (fact -(n, 1))) in (fact 5)"), 120,"multiple-arg-letrec's-procs-1");
+	    assert.equal(Interpreter.parse("letrec fourty(a) = if zero?(a) then 42 else (dif a 1) dif(b,c) = (fourty -(b,c)) in (fourty 4)"),42,"different-proc-arg-count" )
+        } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
 
 function multipleArgLetrecTests() {
     try {
@@ -226,6 +182,64 @@ function multipleArgLetrecTests() {
         console.error("Error: "+error.message);
     }
 }
+
+function addTests() {
+    try {
+        assert.equal(Interpreter.parse("+(3,4)"), 7, "simple-add");
+        assert.equal(Interpreter.parse("+(-(9,6),4)"), 7, "left-exp-eval-add");
+        assert.equal(Interpreter.parse("+(4,-(9,6))"), 7, "right-exp-eval-add");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function mulTests() {
+    try {
+        assert.equal(Interpreter.parse("*(3,4)"), 12, "simple-mul");
+        assert.equal(Interpreter.parse("*(0,5)"), 0, "mul-by-zero");
+        assert.equal(Interpreter.parse("*(5,0)"), 0, "mul-by-zero2");
+        assert.equal(Interpreter.parse("*(-(6,3),4)"), 12, "left-exp-eval-mul");
+        assert.equal(Interpreter.parse("*(4,-(6,3))"), 12, "right-exp-eval-mul");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function divisionTests() {
+    try {
+        assert.throws(function() {Interpreter.parse("/(5,0)")}, "div-by-zero");
+        assert.equal(Interpreter.parse("/(12,3)"), 4, "simple-integer-div");
+        assert.equal(Interpreter.parse("/(6,12)"),0.5, "simple-fractional-div");
+        assert.equal(Interpreter.parse("/(0,12)"), 0, "zero-div-by-int");
+        assert.equal(Interpreter.parse("/(-(9,3),3)"), 2, "left-exp-eval-div");
+        assert.equal(Interpreter.parse("/(6,-(9,7))"), 3, "right-exp-eval-div");
+
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function unaryMinusTests() {
+    try {
+        assert.equal(Interpreter.parse("minus(4)"), -4, "simple-unary-minus");
+        assert.equal(Interpreter.parse("minus(-(9,5))"), -4, "exp-eval-unary-minus");
+        assert.equal(Interpreter.parse("minus(-4)"), 4, "negative-unary-minus");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
+function equalTests() {
+    try {
+        assert.equal(Interpreter.parse("equal?(4,4)"), true, "simple-equal-true");
+        assert.equal(Interpreter.parse("equal?(5,4)"), false, "simple-equal-false");
+        assert.equal(Interpreter.parse("equal?(-(9,3),6)"), true, "equal-left-exp-eval");
+        assert.equal(Interpreter.parse("equal?(6,-(9,3))"), true, "equal-right-exp-eval");
+    } catch (error) {
+        console.error("Error: "+error.message);
+    }
+}
+
 function lesserTests() {
     try {
         assert.equal(Interpreter.parse("lesser?(3,4)"), true, "simple-lesser-true");
@@ -238,14 +252,6 @@ function lesserTests() {
     }
 }
 
-function multipleArgLetrecProcsTests() {
-    try {
-        assert.equal(Interpreter.parse("letrec add(x,y) = -(x,-(0,y)) times(x,y) = if zero?(x) then 0 else (add (times -(x,1) y) y) fact(n) = if zero?(n) then 1 else (times n (fact -(n, 1))) in (fact 5)"), 120,"multiple-arg-letrec's-procs-1");
-	    assert.equal(Interpreter.parse("letrec fourty(a) = if zero?(a) then 42 else (dif a 1) dif(b,c) = (fourty -(b,c)) in (fourty 4)"),42,"different-proc-arg-count" )
-        } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
 function greaterTests() {
     try {
         assert.equal(Interpreter.parse("greater?(4,3)"), true, "simple-greater-true");
@@ -257,6 +263,8 @@ function greaterTests() {
         console.error("Error: "+error.message);
     }
 }
+
+
 
 simpleArithmeticTests();
 nestedArithmeticTests();

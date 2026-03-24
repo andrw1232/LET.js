@@ -1,7 +1,7 @@
 
 
 
-export default class expVal {
+export default class expval {
 
     // num vals
     static numVal(input) {
@@ -31,7 +31,7 @@ export default class expVal {
     // bool vals
     static boolVal(input) {
 
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "bool";
         exp.val = input;
         return exp;
@@ -48,7 +48,7 @@ export default class expVal {
 
 
     static procVal(input) {
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "proc";
         exp.val = input; // array of: [[the bound var IDs], body (that needs to be visited), and env]
         return exp;
