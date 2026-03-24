@@ -47,31 +47,31 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
     // ADD
-    visitAddexp(ctx) {
+    visitAdd(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
 
         if (expval.isNum(left) && expval.isNum(right)) {
-            return expval.numval(left.val + right.val);
+            return expval.numVal(left.val + right.val);
         } else {
             throw new Error("Non number value to add exp");
         }
     }
 
     // MUL
-    visitMulexp(ctx) {
+    visitMul(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
 
         if (expval.isNum(left) && expval.isNum(right)) {
-            return expval.numval(left.val * right.val);
+            return expval.numVal(left.val * right.val);
         } else {
             throw new Error("Non number value to add exp");
         }
     }
 
     // DIV
-    visitDivexp(ctx) {
+    visitDiv(ctx) {
         var left = this.visit(ctx.children[2]);
         var right = this.visit(ctx.children[4]);
         if (right.val == 0) {
@@ -79,7 +79,7 @@ export default class MyLetVisitor extends LetVisitor {
         }
 
         if (expval.isNum(left) && expval.isNum(right)) {
-            return expval.numval(left.val / right.val);
+            return expval.numVal(left.val / right.val);
         } else {
             throw new Error("Non number value to add exp");
         }
@@ -89,7 +89,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitUnaryminus(ctx) {
         var val = this.visit(ctx.children[2]);
         if (expval.isNum(val)) {
-            return expval.numval(-1 * val.val);
+            return expval.numVal(-1 * val.val);
         } else {
             throw new Error("Non number value to unary minus");
         }
@@ -111,27 +111,27 @@ export default class MyLetVisitor extends LetVisitor {
         var right = this.visit(ctx.children[4]);
 
         if (expval.numEqual(left, right)) {
-            return expval.boolval(true);
+            return expval.boolVal(true);
         } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
             return expval.boolean(true);
         }
-        return expval.boolval(false); 
+        return expval.boolVal(false); 
     }
 
     // GREATER
     visitGreater(ctx) {
         if (this.visit(ctx.children[2]).val > this.visit(ctx.children[4]).val) {
-            return expval.boolval(true);
+            return expval.boolVal(true);
         }
-        return expval.boolval(false);
+        return expval.boolVal(false);
     }
 
     // LESS
     visitLess(ctx) {
         if (this.visit(ctx.children[2]).val < this.visit(ctx.children[4]).val) {
-            return expval.boolval(true);
+            return expval.boolVal(true);
         }
-        return expval.boolval(false);
+        return expval.boolVal(false);
     }
 
 
