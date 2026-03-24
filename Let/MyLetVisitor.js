@@ -1,5 +1,5 @@
 // custom classes
-import * as Env from './Env.js';
+import Env from './Env.js'
 import expval from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -10,27 +10,22 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv(["x"], [expval.numval(10)],this.env);
-        this.env = Env.extendEnv(["v"], [expval.numval(5)],this.env);
-        this.env = Env.extendEnv(["i"], [expval.numval(1)],this.env);
+        this.env = Env.extendEnv(["x"], [expval.numVal(10)], this.env);
+        this.env = Env.extendEnv(["v"], [expval.numVal(5)], this.env);
+        this.env = Env.extendEnv(["i"], [expval.numVal(1)], this.env);
     }
 
     // START
     visitStart(ctx) {
-        // console.log("start");
-        // console.log(ctx.getPayload());
-        // console.log(ctx.children[0].getText());
         return this.visitChildren(ctx)[0].val;
     }
 
 
     // NUM
     visitConst(ctx) {
-        //console.log("const");
-
         try {
-            var numVal = Number.parseFloat(ctx.getText());
-            return expval.numVal(numVal);
+            var numval = Number.parseFloat(ctx.getText());
+            return expval.numVal(numval);
         } catch (error) {
             throw new Error("Invalid number");
         }
@@ -39,11 +34,10 @@ export default class MyLetVisitor extends LetVisitor {
 
 
     // DIFF
-    visitDiffexp(ctx) {
-        // console.log("diff");
+    visitDiff(ctx) {
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-        //console.log("left:"+left+"   right: "+right);
+
         if (expval.isNum(left) && expval.isNum(right)) {
             return expval.numVal(left.val-right.val);
         } else {
@@ -104,37 +98,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // ZERO?
     visitZero(ctx) {
-        // console.log("zero?");
         if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
-            return expval.boolVal(true);
-        }
-        return expval.boolVal(false);
-    }
-
-    // EQUAL?
-    visitEqual(ctx) {
-        var left = this.visit(ctx.children[2]);
-        var right = this.visit(ctx.children[4]);
-
-        if (expval.numEqual(left, right)) {
-            return expval.boolVal(true);
-        } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
-            return expval.boolean(true);
-        }
-        return expval.boolVal(false); 
-    }
-
-    // GREATER
-    visitGreater(ctx) {
-        if (this.visit(ctx.children[2]).val > this.visit(ctx.children[4]).val) {
-            return expval.boolVal(true);
-        }
-        return expval.boolVal(false);
-    }
-
-    // LESS
-    visitLess(ctx) {
-        if (this.visit(ctx.children[2]).val < this.visit(ctx.children[4]).val) {
             return expval.boolVal(true);
         }
         return expval.boolVal(false);
@@ -143,7 +107,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // IF ELSE THEN
     visitIf(ctx) {
-        // console.log("if");
+
 	    var conditional = this.visit(ctx.children[1]);
         if (expval.isBool(conditional)) { // ensure legal input
             if (conditional.val) { // conditional is true
@@ -160,20 +124,15 @@ export default class MyLetVisitor extends LetVisitor {
 
     // VAR
     visitVar(ctx) {
-        // console.log("var");
+
         return Env.applyEnv(this.env, ctx.getText());
     }
 
 
-    // LET
+    
+    // LET 
     visitLet(ctx) {
 
-        //console.log("let");
-        //console.log(ctx.children.length);
-
-
-
-        const localEnv = Env.envCopy(this.env);
 
         var variableArr = [];
         for (let i = 1; i < ctx.children.length - 4; i = i+3) {
@@ -186,7 +145,7 @@ export default class MyLetVisitor extends LetVisitor {
         }
 
 
-        this.env = Env.extendEnv(variableArr, valueArr, localEnv);
+        this.env = Env.extendEnv(variableArr, valueArr, this.env);
         
         return this.visit(ctx.children[ctx.children.length-1]);
     }
