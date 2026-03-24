@@ -4,8 +4,6 @@ import assert from 'node:assert/strict';
 import Interpreter from './Interpreter.js';
 
 
-
-
 function simpleArithmeticTests() {
     try { 
         assert.equal(Interpreter.parse("11"), 11, "positive-const");
