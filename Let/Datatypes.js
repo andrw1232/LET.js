@@ -62,6 +62,14 @@ export default class expval {
         }
     }
 
+    static print(input) {
+        if (input.type == "proc") {
+            return "[Function (anonymous)]";
+        } else {
+            return input.val;
+        }
+    }
+
 
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
