@@ -81,11 +81,11 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
-    // LET
+    
+    // LET 
     visitLet(ctx) {
 
-        const localEnv = this.env;
-        this.env = Env.extendEnv(ctx.children[1].getText(), this.visit(ctx.children[3]), localEnv);
+        this.env = Env.extendEnv([ctx.children[1].getText()], [this.visit(ctx.children[3])], this.env);
 
         return this.visit(ctx.children[5]);
     }
