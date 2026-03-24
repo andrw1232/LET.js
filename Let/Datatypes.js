@@ -1,11 +1,11 @@
 
 
 
-export default class expVal {
+export default class expval {
 
     // num vals
     static numVal(input) {
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "num";
         exp.val = input;
         return exp;
@@ -31,7 +31,7 @@ export default class expVal {
     // bool vals
     static boolVal(input) {
 
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "bool";
         exp.val = input;
         return exp;
@@ -39,7 +39,7 @@ export default class expVal {
 
     
     static isBool(input) {
-        if (input.type === "bool") { // should add a try catch if input isn't an object with field 'type'
+        if (input.type === "bool") {
             return true;
         } else {
             return false;
@@ -48,7 +48,7 @@ export default class expVal {
 
 
     static procVal(input) {
-        var exp = new expVal();
+        var exp = new expval();
         exp.type = "proc";
         exp.val = input; // array of: the ID, body (that needs to be visited), and env
         return exp;

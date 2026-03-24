@@ -1,6 +1,6 @@
 // custom classes
-import Env from './Env.js';
-import expVal from './Datatypes.js';
+import Env from './Env.js'
+import expval from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
 
@@ -10,27 +10,22 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv(["x"], [expVal.numVal(10)],this.env);
-        this.env = Env.extendEnv(["v"], [expVal.numVal(5)],this.env);
-        this.env = Env.extendEnv(["i"], [expVal.numVal(1)],this.env);
+        this.env = Env.extendEnv(["x"], [expval.numVal(10)], this.env);
+        this.env = Env.extendEnv(["v"], [expval.numVal(5)], this.env);
+        this.env = Env.extendEnv(["i"], [expval.numVal(1)], this.env);
     }
 
     // START
     visitStart(ctx) {
-        // console.log("start");
-        // console.log(ctx.getPayload());
-        // console.log(ctx.children[0].getText());
         return this.visitChildren(ctx)[0].val;
     }
 
 
     // NUM
     visitConst(ctx) {
-        
         try {
-            var numVal = Number.parseFloat(ctx.getText());
-            //console.log(numVal);
-            return expVal.numVal(numVal);
+            var numval = Number.parseFloat(ctx.getText());
+            return expval.numVal(numval);
         } catch (error) {
             throw new Error("Invalid number");
         }
@@ -40,12 +35,11 @@ export default class MyLetVisitor extends LetVisitor {
 
     // DIFF
     visitDiff(ctx) {
-        //console.log("diff");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-        //console.log("left:"+left+"   right: "+right);
-        if (expVal.isNum(left) && expVal.isNum(right)) {
-            return expVal.numVal(left.val-right.val);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val-right.val);
         } else {
             throw new Error("Non number value to diff exp");
         }
@@ -55,19 +49,19 @@ export default class MyLetVisitor extends LetVisitor {
 
     // ZERO?
     visitZero(ctx) {
-        // console.log("zero?");
-        if (expVal.numEqual(this.visit(ctx.children[2]), expVal.numVal(0))) {
-            return expVal.boolVal(true);
+
+        if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
+            return expval.boolVal(true);
         }
-        return expVal.boolVal(false);
+        return expval.boolVal(false);
     }
 
 
     // IF ELSE THEN
     visitIf(ctx) {
-        // console.log("if");
+
 	    var conditional = this.visit(ctx.children[1]);
-        if (expVal.isBool(conditional)) { // ensure legal input
+        if (expval.isBool(conditional)) { // ensure legal input
             if (conditional.val) { // conditional is true
                 return this.visit(ctx.children[3]);
             } else { // conditional is false
@@ -82,12 +76,13 @@ export default class MyLetVisitor extends LetVisitor {
 
     // VAR
     visitVar(ctx) {
-        // console.log("var");
+
         return Env.applyEnv(this.env, ctx.getText());
     }
 
 
-    // LET
+    
+    // LET 
     visitLet(ctx) {
 
         var variableArr = [];
@@ -110,7 +105,7 @@ export default class MyLetVisitor extends LetVisitor {
     visitProc(ctx) {
         var variable = ctx.children[2].getText(); // get the ID
         var body = ctx.children[4]; // save the body but don't visit it yet
-        var func = expVal.procVal( [variable, body, this.env] ); // save them all in a proc value
+        var func = expval.procVal( [variable, body, this.env] ); // save them all in a proc value
         return func;
     }
 
