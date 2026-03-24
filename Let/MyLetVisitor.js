@@ -1,5 +1,5 @@
 // custom classes
-import * as Env from './Env.js';
+import Env from './Env.js'
 import expval from './Datatypes.js';
 // default antlr class to extend
 import LetVisitor from './ANTLRParser/LetVisitor.js';
@@ -10,9 +10,9 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv("x", expval.numVal(10),this.env);
-        this.env = Env.extendEnv("v", expval.numVal(5),this.env);
-        this.env = Env.extendEnv("i", expval.numVal(1),this.env);
+        this.env = Env.extendEnv(["x"], [expval.numVal(10)], this.env);
+        this.env = Env.extendEnv(["v"], [expval.numVal(5)], this.env);
+        this.env = Env.extendEnv(["i"], [expval.numVal(1)], this.env);
     }
 
     // START

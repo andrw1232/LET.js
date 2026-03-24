@@ -1,58 +1,59 @@
 
 
-/**
- * A function to pull the value associated with the variable within the environment
- * @param {*} env the environment which may contain a binding for the variable
- * @param {*} variable the variable to get the associated value for
- * @returns the value associated with the variable or null if no binding is in the environment.
- */
-export function applyEnv(env, variable) {
+export default class Env {
 
-    if (env.length == 0) { // no where left to search
-        throw new Error("Unbound variable: "+variable);
+    /**
+     * A function to pull the value associated with the variable within the environment
+     * @param {*} env the environment which may contain a binding for the variable
+     * @param {*} searchVar the variable to get the associated value for
+     * @returns the value associated with the variable or null if no binding is in the environment.
+     */
+    static applyEnv(env, searchVar) {
+        return env(searchVar);
     }
-    else if (env[0][0] == variable) {
-        return env[0][1];
+
+
+    /**
+     * a function that creates a new and empty environment object
+     * @returns an empty environment 
+     */
+    static emptyEnv() {
+        return (searchVar) => {
+            throw new Error("No binding found for "+searchVar);
+        }
     }
-    else {
-        var localEnv = envCopy(env);
-        localEnv.shift(); // removes the first element of the array
-        return applyEnv(localEnv, variable);
+
+
+    /**
+     * a function to add a variable value pair to an existing environment
+     * @param {*} variableArr the variables to associate with the values
+     * @param {*} valueArr the values to associate with the variables
+     * @param {*} env the environment to store the binding in
+     * @returns a new environment with a new binding of the variable with the value
+     */
+    static extendEnv(variableArr, valueArr, env) {
+        
+        return (searchVar) => {
+
+            if (variableArr.length == 0 || valueArr.length == 0) {
+                return env(searchVar); // nothing left to check in the variableArray, so recurse to prev env
+
+            } else if (searchVar == variableArr[0]) {
+                return valueArr[0]; // variable found!
+
+            } else {
+                var removedVar = variableArr.shift(); // remove the first elements from each variable value pair to recurse down without them in the array object
+                var removedVal = valueArr.shift();
+                var result = this.extendEnv(variableArr, valueArr, env)(searchVar); // recurse
+                variableArr.unshift(removedVar); // restore the environment state as we recurse back up.
+                valueArr.unshift(removedVal);
+                return result;
+            }
+        }
     }
-}
-
-
-/**
- * a function that creates a new and empty environment object
- * @returns an empty environment 
- */
-export function emptyEnv() {
-    return Array();
-}
-
-
-/**
- * a function to add a variable value pair to an existing environment
- * @param {*} variable the variable to associate with the value
- * @param {*} value the value to associate with the variable
- * @param {*} env the environment to store the binding in
- * @returns a new environment with a new binding of the variable with the value
- */
-export function extendEnv(variable, value, env) {
-    var localEnv = envCopy(env);
-    localEnv.unshift(new Array(variable,value)); // places the new element at the beginning of the array
-    return localEnv;
-}
 
 
 
-// internal function to make a deep copy of an environment
-function envCopy(arr) {
 
-    var newArray = new Array(arr.length);
 
-    for (let i = 0; i < newArray.length; i++) {
-        newArray[i] = new Array(arr[i][0],arr[i][1]);    
-    }
-    return newArray;
 }
