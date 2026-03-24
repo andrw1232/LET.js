@@ -10,27 +10,22 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv("x", expval.numval(10),this.env);
-        this.env = Env.extendEnv("v", expval.numval(5),this.env);
-        this.env = Env.extendEnv("i", expval.numval(1),this.env);
+        this.env = Env.extendEnv("x", expval.numVal(10),this.env);
+        this.env = Env.extendEnv("v", expval.numVal(5),this.env);
+        this.env = Env.extendEnv("i", expval.numVal(1),this.env);
     }
 
     // START
     visitStart(ctx) {
-        // console.log("start");
-        // console.log(ctx.getPayload());
-        // console.log(ctx.children[0].getText());
         return this.visitChildren(ctx)[0].val;
     }
 
 
     // NUM
     visitConst(ctx) {
-        //console.log("const");
-
         try {
             var numval = Number.parseFloat(ctx.getText());
-            return expval.numval(numval);
+            return expval.numVal(numval);
         } catch (error) {
             throw new Error("Invalid number");
         }
@@ -39,13 +34,12 @@ export default class MyLetVisitor extends LetVisitor {
 
 
     // DIFF
-    visitDiffexp(ctx) {
-        // console.log("diff");
+    visitDiff(ctx) {
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-        //console.log("left:"+left+"   right: "+right);
+
         if (expval.isNum(left) && expval.isNum(right)) {
-            return expval.numval(left.val-right.val);
+            return expval.numVal(left.val-right.val);
         } else {
             throw new Error("Non number value to diff exp");
         }
@@ -55,17 +49,17 @@ export default class MyLetVisitor extends LetVisitor {
 
     // ZERO?
     visitZero(ctx) {
-        // console.log("zero?");
-        if (expval.numEqual(this.visit(ctx.children[2]), expval.numval(0))) {
-            return expval.boolval(true);
+
+        if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
+            return expval.boolVal(true);
         }
-        return expval.boolval(false);
+        return expval.boolVal(false);
     }
 
 
     // IF ELSE THEN
     visitIf(ctx) {
-        // console.log("if");
+
 	    var conditional = this.visit(ctx.children[1]);
         if (expval.isBool(conditional)) { // ensure legal input
             if (conditional.val) { // conditional is true
@@ -82,7 +76,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // VAR
     visitVar(ctx) {
-        // console.log("var");
+
         return Env.applyEnv(this.env, ctx.getText());
     }
 
@@ -90,7 +84,6 @@ export default class MyLetVisitor extends LetVisitor {
     // LET
     visitLet(ctx) {
 
-        // console.log("let");
         const localEnv = this.env;
         this.env = Env.extendEnv(ctx.children[1].getText(), this.visit(ctx.children[3]), localEnv);
 

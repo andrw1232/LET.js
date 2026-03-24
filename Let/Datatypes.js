@@ -4,7 +4,7 @@
 export default class expval {
 
     // num vals
-    static numval(input) {
+    static numVal(input) {
         var exp = new expval();
         exp.type = "num";
         exp.val = input;
@@ -29,7 +29,7 @@ export default class expval {
     }
 
     // bool vals
-    static boolval(input) {
+    static boolVal(input) {
 
         var exp = new expval();
         exp.type = "bool";
@@ -39,7 +39,7 @@ export default class expval {
 
     
     static isBool(input) {
-        if (input.type === "bool") { // should add a try catch if input isn't an object with field 'type'
+        if (input.type === "bool") {
             return true;
         } else {
             return false;
