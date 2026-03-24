@@ -4,7 +4,7 @@
 export default class expval {
 
     // num vals
-    static numval(input) {
+    static numVal(input) {
         var exp = new expval();
         exp.type = "num";
         exp.val = input;
@@ -29,7 +29,7 @@ export default class expval {
     }
 
     // bool vals
-    static boolval(input) {
+    static boolVal(input) {
 
         var exp = new expval();
         exp.type = "bool";
@@ -50,10 +50,10 @@ export default class expval {
     // make a generic exp val and fit the type as best as possible
     static makeExpVal(input) {
         if (typeof(input) === "number") {
-            return this.numval(input);
+            return this.numVal(input);
         }
         if (typeof(input) == "boolean") {
-            return this.boolval(input);
+            return this.boolVal(input);
         }
         throw new Error("invalid LET datatype for: "+input);
     }

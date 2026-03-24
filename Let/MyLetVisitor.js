@@ -29,8 +29,8 @@ export default class MyLetVisitor extends LetVisitor {
         //console.log("const");
 
         try {
-            var numval = Number.parseFloat(ctx.getText());
-            return expval.numval(numval);
+            var numVal = Number.parseFloat(ctx.getText());
+            return expval.numVal(numVal);
         } catch (error) {
             throw new Error("Invalid number");
         }
@@ -45,21 +45,99 @@ export default class MyLetVisitor extends LetVisitor {
         var right = (this.visit(ctx.children[4]));
         //console.log("left:"+left+"   right: "+right);
         if (expval.isNum(left) && expval.isNum(right)) {
-            return expval.numval(left.val-right.val);
+            return expval.numVal(left.val-right.val);
         } else {
             throw new Error("Non number value to diff exp");
         }
         
     }
 
+    // ADD
+    visitAddexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val + right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // MUL
+    visitMulexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val * right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // DIV
+    visitDivexp(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+        if (right.val == 0) {
+            throw new Error("division by zero");
+        }
+
+        if (expval.isNum(left) && expval.isNum(right)) {
+            return expval.numVal(left.val / right.val);
+        } else {
+            throw new Error("Non number value to add exp");
+        }
+    }
+
+    // UNARY MINUS
+    visitUnaryminus(ctx) {
+        var val = this.visit(ctx.children[2]);
+        if (expval.isNum(val)) {
+            return expval.numVal(-1 * val.val);
+        } else {
+            throw new Error("Non number value to unary minus");
+        }
+    }
+
 
     // ZERO?
     visitZero(ctx) {
         // console.log("zero?");
-        if (expval.numEqual(this.visit(ctx.children[2]), expval.numval(0))) {
-            return expval.boolval(true);
+        if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
+            return expval.boolVal(true);
         }
-        return expval.boolval(false);
+        return expval.boolVal(false);
+    }
+
+    // EQUAL?
+    visitEqual(ctx) {
+        var left = this.visit(ctx.children[2]);
+        var right = this.visit(ctx.children[4]);
+
+        if (expval.numEqual(left, right)) {
+            return expval.boolVal(true);
+        } else if (expval.isBool(left) && expvalval.isBool(right) && left.val && right.val) {
+            return expval.boolean(true);
+        }
+        return expval.boolVal(false); 
+    }
+
+    // GREATER
+    visitGreater(ctx) {
+        if (this.visit(ctx.children[2]).val > this.visit(ctx.children[4]).val) {
+            return expval.boolVal(true);
+        }
+        return expval.boolVal(false);
+    }
+
+    // LESS
+    visitLess(ctx) {
+        if (this.visit(ctx.children[2]).val < this.visit(ctx.children[4]).val) {
+            return expval.boolVal(true);
+        }
+        return expval.boolVal(false);
     }
 
 
