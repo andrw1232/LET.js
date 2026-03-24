@@ -1,4 +1,5 @@
-import expVal from './Datatypes.js';
+
+import expval from './Datatypes.js';
 
 export default class Env {
 
@@ -9,8 +10,6 @@ export default class Env {
      * @returns the value associated with the variable or null if no binding is in the environment.
      */
     static applyEnv(env, searchVar) {
-        //console.log("var: "+searchVar);
-        //console.log(env.toString());
         return env(searchVar);
     }
 
@@ -34,7 +33,6 @@ export default class Env {
      * @returns a new environment with a new binding of the variable with the value
      */
     static extendEnv(variableArr, valueArr, env) {
-        //console.log("extending");
         return (searchVar) => {
 
             if (variableArr.length == 0 || valueArr.length == 0) {
@@ -56,11 +54,10 @@ export default class Env {
 
 
     static extendRecEnv(procName, boundVar, procBody, env) {
-        //console.log(boundVar + " : "+procBody[1]);
         
         return (searchVar) => {
             if (searchVar == procName) {
-                return expVal.procVal([boundVar, procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
+                return expval.procVal([boundVar, procBody, this.extendRecEnv(procName, boundVar, procBody, env)]);
             } else {
                 return env(searchVar);
             }
