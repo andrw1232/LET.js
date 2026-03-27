@@ -62,7 +62,7 @@ export default class expval {
         }
     }
 
-    static print(input) {
+    static getPrintableVal(input) {
         if (input.type == "proc") {
             return "[Function (anonymous)]";
         } else {
