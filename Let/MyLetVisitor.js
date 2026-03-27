@@ -17,7 +17,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // START
     visitStart(ctx) {
-        return this.visitChildren(ctx)[0].val;
+        return expval.getPrintableVal(this.visitChildren(ctx)[0]);
     }
 
 
@@ -86,9 +86,7 @@ export default class MyLetVisitor extends LetVisitor {
     
     // LET 
     visitLet(ctx) {
-        //const localEnv = Env.envCopy(this.env);
 
-        // could write a recursive function for this I suppose? It's just building the list of inputs
         var variableArr = [];
         for (let i = 1; i < ctx.children.length - 4; i = i+3) {
             variableArr.unshift(ctx.children[i].getText());

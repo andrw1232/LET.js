@@ -11,6 +11,7 @@ function simpleArithmeticTests() {
         assert.equal(Interpreter.parse("-(44,33)"), 11, "simple-arith-1");
     } catch (err) {
         console.error("Error: "+err);
+        console.log(err);
     }
 }
 
