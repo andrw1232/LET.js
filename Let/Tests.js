@@ -4,8 +4,6 @@ import assert from 'node:assert/strict';
 import Interpreter from './Interpreter.js';
 
 
-
-
 function simpleArithmeticTests() {
     try { 
         assert.equal(Interpreter.parse("11"), 11, "positive-const");
@@ -68,19 +66,13 @@ function armsOfIfTests() {
     try {
         assert.equal(Interpreter.parse("if zero?(-(11,11)) then 3 else 4"), 3, "if-eval-test-true");
         assert.equal(Interpreter.parse("if zero?(-(11,12)) then 3 else 4"), 4, "if-eval-test-false");
-    } catch (error) {
-        console.error("Error: "+error.message);
-    }
-}
-
-function armsOfIfTests2() {
-    try {
         assert.equal(Interpreter.parse("if zero?(-(11,11)) then 3 else 0"), 3, "if-eval-test-true-2");
         assert.equal(Interpreter.parse("if zero?(-(11,12)) then 0 else 4"), 4, "if-eval-test-false-2");
     } catch (error) {
         console.error("Error: "+error.message);
     }
 }
+
 
 function simpleLetTests() {
     try {
@@ -229,7 +221,6 @@ simpleUnboundVariableTests();
 simpleConditionalTests();
 dynamicTypeCheckingTests();
 armsOfIfTests();
-armsOfIfTests2();
 simpleLetTests();
 letBodyRHSEvalTests();
 nestedLetTests();
