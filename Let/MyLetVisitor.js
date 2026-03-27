@@ -17,7 +17,7 @@ export default class MyLetVisitor extends LetVisitor {
 
     // START
     visitStart(ctx) {
-        return this.visitChildren(ctx)[0].val;
+        return expval.getPrintableVal(this.visitChildren(ctx)[0]);
     }
 
 
