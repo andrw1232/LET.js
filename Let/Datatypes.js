@@ -39,7 +39,7 @@ export default class expval {
 
     
     static isBool(input) {
-        if (input.type === "bool") { // should add a try catch if input isn't an object with field 'type'
+        if (input.type === "bool") {
             return true;
         } else {
             return false;
@@ -60,6 +60,14 @@ export default class expval {
             return true;
         } else {
             return false;
+        }
+    }
+
+    static getPrintableVal(input) {
+        if (input.type == "proc") {
+            return "[Function (anonymous)]";
+        } else {
+            return input.val;
         }
     }
 

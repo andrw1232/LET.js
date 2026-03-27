@@ -42,7 +42,6 @@ export default class Env {
      */
     static extendEnv(variableArr, valueArr, env) {
 
-
         return (searchVar) => {
 
             if (variableArr.length == 0 || valueArr.length == 0) {
