@@ -10,14 +10,14 @@ export default class MyLetVisitor extends LetVisitor {
     constructor() {
         super();
         this.env = Env.emptyEnv();
-        this.env = Env.extendEnv(["x"], [expval.numVal(10)],this.env);
-        this.env = Env.extendEnv(["v"], [expval.numVal(5)],this.env);
-        this.env = Env.extendEnv(["i"], [expval.numVal(1)],this.env);
+        this.env = Env.extendEnv(["x"], [expval.numVal(10)], this.env);
+        this.env = Env.extendEnv(["v"], [expval.numVal(5)], this.env);
+        this.env = Env.extendEnv(["i"], [expval.numVal(1)], this.env);
     }
 
     // START
     visitStart(ctx) {
-        return this.visitChildren(ctx)[0].val;
+        return expval.getPrintableVal(this.visitChildren(ctx)[0]);
     }
 
 
@@ -34,10 +34,9 @@ export default class MyLetVisitor extends LetVisitor {
 
     // DIFF
     visitDiff(ctx) {
-        // console.log("dif");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
-        //console.log("left:"+left+"   right: "+right);
+
         if (expval.isNum(left) && expval.isNum(right)) {
             return expval.numVal(left.val-right.val);
         } else {
@@ -98,7 +97,6 @@ export default class MyLetVisitor extends LetVisitor {
 
     // ZERO?
     visitZero(ctx) {
-        // console.log("zero?");
         if (expval.numEqual(this.visit(ctx.children[2]), expval.numVal(0))) {
             return expval.boolVal(true);
         }
@@ -161,7 +159,8 @@ export default class MyLetVisitor extends LetVisitor {
     }
 
 
-    // LET
+    
+    // LET 
     visitLet(ctx) {
 
         // could write a recursive function for this I suppose? It's just building the list of inputs
