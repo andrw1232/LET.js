@@ -39,7 +39,7 @@ export default class MyLetVisitor extends LetVisitor {
 
 
     // DIFF
-    visitDiffexp(ctx) {
+    visitDiff(ctx) {
         // console.log("diff");
         var left = (this.visit(ctx.children[2]));
         var right = (this.visit(ctx.children[4]));
