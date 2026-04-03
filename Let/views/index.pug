@@ -1,0 +1,11 @@
+html 
+    head 
+        title Let.js
+        link(rel='stylesheet' href='style.css')
+    body
+        h1 Welcome to LET!
+        form(action="/" method='post')
+            textarea(name="in")= body
+            input(type="submit" value="parse") 
+        
+        textarea#answer(readonly='true')= answer
