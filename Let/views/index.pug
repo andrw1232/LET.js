@@ -5,7 +5,7 @@ html
     body
         h1 Welcome to LET!
         form(action="/" method='post')
-            textarea(name="in")= body
+            textarea#body(name="in")= body
             input(type="submit" value="parse") 
-        
+        h4 Answer:
         textarea#answer(readonly='true')= answer

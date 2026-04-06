@@ -5,12 +5,11 @@ import express from 'express';
 
 
 const hostname = '127.0.0.1';
-const port = 8080;
+const port = 8000;
 
 const app = express();
 
 app.use(express.static('public'));
-
 app.set('views','./views');
 app.set('view engine', 'pug');
 
@@ -23,7 +22,7 @@ app.get("/", (req,res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/html');    
     
-    res.render('index', {body: "", answer: ""});
+    res.render('index', {body: "Write your LET program here", answer: ""});
 });
 
 
