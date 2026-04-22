@@ -116,13 +116,9 @@ export default class MyLetVisitor extends LetVisitor {
         var rator = this.visit(ctx.children[1]); // the procedure
         var rand = this.visit(ctx.children[2]); // the argument
 
-        var localEnv = this.env; // save the current local env
+        this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environment as the procedures environment with a binding for the argument.
 
-        this.env = Env.extendEnv([rator.val[0]], [rand], rator.val[2]); // save the current environemtn as the procedures environment with a binding for the argument.
-        var result = this.visit(rator.val[1]); // resolve the procedure
-
-        this.env = localEnv; // put the current env back
-        return result;
+        return this.visit(rator.val[1]);;
         
     }
 }
