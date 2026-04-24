@@ -8,6 +8,50 @@ This project is a JavaScript implementation of an interpreter for the LET langua
 
 <sup>2</sup> https://www.antlr.org/
 
+### The LET language 
+
+```plantuml
+hide footbox
+
+
+skinparam BoxPadding 100
+skinparam ParticipantPadding 20
+skinparam Padding 5
+
+
+actor Programmer
+box "LET" #LightGray
+	participant FE as "**Front End**\n//Main.js//"
+    participant ANTLR as "**ANTLR Parser**\n//interpreter.js"
+	participant Interpreter as "**MyLetVisitor.js**\n////"
+end box
+
+participant Terminal as "**Terminal**\n//output//"
+
+activate Programmer
+activate Terminal
+
+Programmer     -> FE                    : LET Program Sentence
+
+activate FE
+FE             -> ANTLR                 : LET Program Sentence
+deactivate FE
+
+activate ANTLR
+ANTLR             -> Interpreter            : LET Parse Tree
+deactivate ANTLR
+
+
+
+
+activate Interpreter
+Interpreter    -> Terminal              : Answer\n(//value//)
+deactivate Interpreter
+
+deactivate Programmer
+deactivate Terminal
+```
+
 
 ## Getting Started
 
