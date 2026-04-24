@@ -17,9 +17,9 @@ The ANTLR command line tool can be downloaded from the ANTLR website linked abov
 
 Navigate to inside of the Let folder. Use the following command to download the ANTLR runtime library from the node package manager, npm.
 
-'''bash
+```bash
 npm i antlr4@4.9.2
-'''
+```
 
 
 
