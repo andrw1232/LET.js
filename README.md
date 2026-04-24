@@ -53,8 +53,15 @@ The test suite can be executed and checked with the following command. No output
 node Tests.js
 ```
 
+### Web Version
 
+A simple locally hosted web server is also provided to execute LET programs from a web browser. Navigate to the Let folder and run the following command.
 
+```bash
+node Server.js
+```
+
+The Let.js website can then be accessed at http://127.0.0.1:8000.
 
 
 ## Help
