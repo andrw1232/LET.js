@@ -22,8 +22,8 @@ skinparam Padding 5
 actor Programmer
 box "LET" #LightGray
 	participant FE as "**Front End**\n//Main.js//"
-    participant ANTLR as "**ANTLR Parser**\n//interpreter.js"
-	participant Interpreter as "**MyLetVisitor.js**\n////"
+    participant ANTLR as "**ANTLR Parser**\n//interpreter.js//"
+	participant Interpreter as "**Interpreter**\n//MyLetVisitor.js//"
 end box
 
 participant Terminal as "**Terminal**\n//output//"
@@ -31,7 +31,7 @@ participant Terminal as "**Terminal**\n//output//"
 activate Programmer
 activate Terminal
 
-Programmer     -> FE                    : LET Program Sentence
+Programmer     -> FE                    : LET Program Input
 
 activate FE
 FE             -> ANTLR                 : LET Program Sentence
