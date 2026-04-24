@@ -13,7 +13,9 @@ This project is a JavaScript implementation of an interpreter for the LET langua
 
 Download all the files from the repository. 
 
-The ANTLR command line tool can be downloaded from the ANTLR website linked above. Node.js is also required and can be downloaded from the Node website https://nodejs.org/en.
+The ANTLR command line tool can be downloaded from the ANTLR website linked above. Node.js is also required and can be downloaded from the Node website https://nodejs.org/en. 
+This project was built using Node version 18.19.1. Your node version can be checked by typing `node` in the terminal. 
+This project was built using ANTLR4 version 4.9.2. Your ANTLR4 version can be checked by typing `ANTLR4` in the terminal.
 
 Navigate to inside of the Let folder. Use the following command to download the ANTLR runtime library from the node package manager, npm.
 
@@ -21,6 +23,13 @@ Navigate to inside of the Let folder. Use the following command to download the 
 npm i antlr4@4.9.2
 ```
 
+Navigate to inside the ANTLRParser folder and run the following command.
+
+```bash
+antlr4 -Dlanguage=JavaScript -visitor Let.g4
+```
+
+Navigate back to the 
 
 
 ### Installing
