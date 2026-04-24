@@ -45,7 +45,7 @@ deactivate ANTLR
 
 
 activate Interpreter
-Interpreter    -> Terminal              : Answer\n(//value//)
+Interpreter    -> Terminal              : Answer)
 deactivate Interpreter
 
 deactivate Programmer
@@ -121,6 +121,6 @@ Project built by Andrew Traynor at The King's University.
 
 ## Acknowledgments
 
-Dr. Andrew Tappenden for help and advice throughout the entire research and development process.
+Dr. Andrew Tappenden for advice and support throughout the entire research and development process.
 
 The King's University for use of their lab environment. 
