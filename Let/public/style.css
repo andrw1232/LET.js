@@ -1,0 +1,71 @@
+body {
+    background-color: rgb(159, 62, 204);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    /* centers the item */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: rgb(0, 0, 0);
+}
+
+h4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: rgb(0, 0, 0);
+    margin-bottom: 5px;
+}
+
+form {
+    /* centers the item */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* stacks the text box and submit button vertically */
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+textarea {
+    
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    border-color: black;
+
+}
+
+textarea#body {
+    box-sizing: border-box;
+    width: 60%;
+    height: 200px;
+}
+
+textarea#answer {
+    box-sizing: border-box;
+    width: 100px;
+    height: 50px'
+
+}
+
+input {
+    border-radius: 5px;
+    height: 50px;
+    width: 100px;
+}
+
+
+#answer {
+    /* centers the item */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin:auto;
+    max-width:500px;
+}
