@@ -11,11 +11,14 @@ This project is a JavaScript implementation of an interpreter for the LET langua
 
 ## Getting Started
 
+### Installing
+
+
 Download all the files from the repository. 
 
 The ANTLR command line tool can be downloaded from the ANTLR website linked above. Node.js is also required and can be downloaded from the Node website https://nodejs.org/en. 
 This project was built using Node version 18.19.1. Your node version can be checked by typing `node` in the terminal. 
-This project was built using ANTLR4 version 4.9.2. Your ANTLR4 version can be checked by typing `ANTLR4` in the terminal.
+This project was built using ANTLR4 version 4.9.2. Your ANTLR4 version can be checked by typing `antlr4` in the terminal.
 
 Navigate to inside of the Let folder. Use the following command to download the ANTLR runtime library from the node package manager, npm.
 
@@ -29,22 +32,44 @@ Navigate to inside the ANTLRParser folder and run the following command.
 antlr4 -Dlanguage=JavaScript -visitor Let.g4
 ```
 
-Navigate back to the 
-
-
-### Installing
 
 ### Executing
-Built using antlr4 version 4.9.2. The matching antlr4 JavaScript runtime environment can be downloaded using npm i antlr4@4.9.2 command.
 
-The following command will build the JavaScript grammer handling classes: antlr4 -Dlanguage=JavaScript -visitor Let.g4
+Navigate to the Let folder. The Let language can be interacted with via a read eval input loop with the following command.
 
-Ensure the package.json file includes: "type": "module"
+```bash
+node Main.js
+```
 
-Use the following command to run: node let.js
+LET programs can also be executed from a file with the following command.
+
+```bash
+node Main.js exampleProgram.txt
+```
+
+The test suite can be executed and checked with the following command. No output will be generated if all tests pass.
+
+```bash
+node Tests.js
+```
+
+
+
+
 
 ## Help
 
+For ANTLR related questions please see the ANTLR docs https://github.com/antlr/antlr4/blob/master/doc/index.md.
+
+For Node.js questiosn please see the Node.js docs https://nodejs.org/docs/latest/api/.
+
+
 ## Author
 
+Project built by Andrew Traynor at The King's University.
+
 ## Acknowledgments
+
+Dr. Andrew Tappenden for help and advice throughout the entire research and development process.
+
+The King's University for use of their lab environment. 
