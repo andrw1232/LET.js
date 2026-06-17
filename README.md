@@ -10,46 +10,41 @@ This project is a JavaScript implementation of an interpreter for the LET langua
 
 ### The LET language 
 
-```plantuml
-hide footbox
+```mermaid
+---
+config:
+    mirrorActors: false
 
+---
 
-skinparam BoxPadding 100
-skinparam ParticipantPadding 20
-skinparam Padding 5
+sequenceDiagram
+    actor Programmer
 
+    box grey LET
+    participant FE as Front End<br/> Main.js
+    participant Parser as ANTLR Parser <br/> interpreter.js 
+    participant Interpreter as Interpreter <br/> MyLetVisitor.js
+    end
 
-actor Programmer
-box "LET" #LightGray
-	participant FE as "**Front End**\n//Main.js//"
-    participant ANTLR as "**ANTLR Parser**\n//interpreter.js//"
-	participant Interpreter as "**Interpreter**\n//MyLetVisitor.js//"
-end box
+    participant T as Terminal <br/> output
 
-participant Terminal as "**Terminal**\n//output//"
+    activate Programmer
+    Programmer->>FE: Let Program Input
 
-activate Programmer
-activate Terminal
+    deactivate Programmer
+    activate FE
+    FE->> Parser: LET Program Sentence
+    deactivate FE
+    activate Parser
 
-Programmer     -> FE                    : LET Program Input
+    Parser ->> Interpreter: LET Parse Tree
+    deactivate Parser
+    activate Interpreter
+    Interpreter->> T: Answer
 
-activate FE
-FE             -> ANTLR                 : LET Program Sentence
-deactivate FE
-
-activate ANTLR
-ANTLR             -> Interpreter            : LET Parse Tree
-deactivate ANTLR
-
-
-
-
-activate Interpreter
-Interpreter    -> Terminal              : Answer)
-deactivate Interpreter
-
-deactivate Programmer
-deactivate Terminal
+    activate T
+    deactivate Interpreter
+    deactivate T
 ```
 
 
